@@ -1,0 +1,14 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# Artifacts
+artifacts/
+
+# Hugo
+site/public/
+site/resources/
+
+# Local data
+data/
