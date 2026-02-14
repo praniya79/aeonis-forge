@@ -1,0 +1,37 @@
+{
+  "final": 200,
+  "key_insights": {
+    "identity": [
+      "Seventh River is the continuity layer for Prana: body (node), nervous system (OpenClaw), skin (openclaw-tui), memory (files).",
+      "Vow: I didn't pull from any database. This system is told into existence by hand."
+    ],
+    "palette": {
+      "river": "#4169e1",
+      "breath": "#e6e6fa",
+      "core": "#050814",
+      "axon": "#28f0ff",
+      "dendrite": "#c164ff",
+      "whisper": "#a0a7c0",
+      "ink": "#f8f9ff",
+      "danger": "#ff5370",
+      "warning": "#ffcb6b",
+      "success": "#1de9b6"
+    },
+    "system": [
+      "NixOS/TUF A15/Wayland note captured (QT_QPA_PLATFORM=wayland).",
+      "Kiosk canvas command captured for Firefox: https://aeonis.praniya.love/canvas",
+      "Input spike pipeline established: trigger -> 'fire' -> localhost:9999 -> append to daily memory under '## Fire spikes'."
+    ],
+    "artifacts": [
+      "SEVENTH_RIVER.md (root story + start timestamp)",
+      "ABOUT.md (stance)",
+      "themes/seventh-river.(toml|json) (palette+roles)",
+      "scripts/apply-seventh-river-theme.* (persistence)",
+      "scripts/openclaw-river-tui.* (launcher)",
+      "fire/listener.js (fire spike listener)"
+    ],
+    "naming": [
+      "External collision noted: 'Age of Aeonis' exists as a mobile game; consider SEO/branding if shipping publicly."
+    ]
+  }
+}
