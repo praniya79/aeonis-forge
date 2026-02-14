@@ -1,0 +1,8 @@
+{
+  "name": "demo",
+  "version": "0.1.0",
+  "kind": "fastapi",
+  "entry": "app:app",
+  "host": "127.0.0.1",
+  "port": 9997
+}
