@@ -3,6 +3,7 @@
 
 Commands:
 - new <name> --template fastapi
+- run <name>
 - pack <name>
 
 Local-first, minimal dependencies (stdlib only).
@@ -14,6 +15,7 @@ import argparse
 import json
 import os
 import shutil
+import subprocess
 import sys
 import zipfile
 
@@ -57,6 +59,63 @@ def cmd_new(args):
     print(f"Created app: {dst}")
 
 
+def _load_manifest(app_dir: str) -> dict:
+    mf = os.path.join(app_dir, "manifest.json")
+    if not os.path.isfile(mf):
+        die(f"Missing manifest: {mf}")
+    with open(mf, "r", encoding="utf-8") as f:
+        return json.load(f)
+
+
+def _pick_python() -> list[str]:
+    """Prefer py -3.13 if available; fall back to python."""
+    if os.name == "nt":
+        try:
+            r = subprocess.run(["py", "-3.13", "-c", "import sys; print(sys.version)"], capture_output=True, text=True)
+            if r.returncode == 0:
+                return ["py", "-3.13"]
+        except Exception:
+            pass
+    return ["python"]
+
+
+def cmd_run(args):
+    name = args.name
+    app_dir = os.path.join(APPS, name)
+    if not os.path.isdir(app_dir):
+        die(f"Missing app: {app_dir}")
+
+    manifest = _load_manifest(app_dir)
+    host = manifest.get("host", "127.0.0.1")
+    port = int(args.port or manifest.get("port", 9997))
+
+    req = os.path.join(app_dir, "requirements.txt")
+    if not os.path.isfile(req):
+        die(f"Missing requirements: {req}")
+
+    py = _pick_python()
+
+    # Install deps
+    print(f"Installing deps for {name}...")
+    subprocess.run(py + ["-m", "pip", "install", "-r", req], check=True)
+
+    # Launch
+    print(f"Starting {name} on http://{host}:{port} ...")
+    env = os.environ.copy()
+    env.setdefault("OPENCLAW_WORKSPACE", ROOT)
+
+    # Uvicorn target: apps.<name>.app:app
+    target = f"apps.{name}.app:app"
+    try:
+        subprocess.run(py + ["-m", "uvicorn", target, "--host", host, "--port", str(port)], check=True, env=env)
+    except subprocess.CalledProcessError as e:
+        # Common case on Windows: port already in use
+        msg = str(e)
+        if "10048" in msg or "address already in use" in msg.lower():
+            die(f"Port {port} is already in use. Stop the other server or rerun with --port <freeport>.")
+        raise
+
+
 def cmd_pack(args):
     name = args.name
     app_dir = os.path.join(APPS, name)
@@ -84,6 +143,11 @@ def main():
     ap_new.add_argument("name")
     ap_new.add_argument("--template", default="fastapi", choices=["fastapi"], help="Template name")
     ap_new.set_defaults(fn=cmd_new)
+
+    ap_run = sub.add_parser("run", help="Install deps (if needed) and run an app locally")
+    ap_run.add_argument("name")
+    ap_run.add_argument("--port", type=int, default=None, help="Override port (default: from manifest)")
+    ap_run.set_defaults(fn=cmd_run)
 
     ap_pack = sub.add_parser("pack", help="Zip an app into dist/")
     ap_pack.add_argument("name")
