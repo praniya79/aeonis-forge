@@ -1,0 +1,11 @@
+{
+  "activeTheme": "seventh-river",
+  "files": {
+    "toml": "themes/seventh-river.toml",
+    "json": "themes/seventh-river.json"
+  },
+  "anchors": {
+    "river": "#4169e1",
+    "breath": "#e6e6fa"
+  }
+}

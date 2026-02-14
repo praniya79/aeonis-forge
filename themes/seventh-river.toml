@@ -1,0 +1,53 @@
+# Seventh River theme (draft)
+#
+# This file is intentionally schema-agnostic: it defines a stable palette + role mapping.
+# If openclaw-tui expects a different structure, translate these keys 1:1.
+
+[meta]
+name = "seventh-river"
+version = 1
+
+[palette]
+core     = "#050814" # cavern background (near-black, blue undertone)
+ink      = "#f8f9ff" # primary text
+whisper  = "#a0a7c0" # muted text / secondary labels
+breath   = "#e6e6fa" # lavender mist (soft highlight)
+river    = "#4169e1" # royal blue (the channel)
+axon     = "#28f0ff" # electric cyan (synaptic trail)
+dendrite = "#c164ff" # magenta-violet (sparks)
+success  = "#1de9b6"
+warning  = "#ffcb6b"
+danger   = "#ff5370"
+
+[roles]
+# Global
+background = "{palette.core}"
+text       = "{palette.ink}"
+textMuted  = "{palette.whisper}"
+
+# Focus + motion (the "synapse")
+cursorBg   = "{palette.axon}"
+cursorFg   = "{palette.core}"
+selectionBg = "{palette.river}"
+selectionFg = "{palette.ink}"
+
+# Accents
+accentPrimary   = "{palette.river}"
+accentSecondary = "{palette.dendrite}"
+accentSoft      = "{palette.breath}"
+
+# States
+ok      = "{palette.success}"
+warn    = "{palette.warning}"
+error   = "{palette.danger}"
+
+# Borders: the void (no frames)
+borderStyle = "none"
+panelBorder = "none"
+separator   = "{palette.core}"  # effectively invisible
+
+[notes]
+# Design intent:
+# - No borders. Panels float.
+# - Attention is shown by glow (selection/cursor), not outlines.
+# - River (royal blue) is the primary channel; Axon (cyan) rides on top.

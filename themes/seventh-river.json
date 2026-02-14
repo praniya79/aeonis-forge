@@ -1,0 +1,48 @@
+{
+  "meta": {
+    "name": "seventh-river",
+    "version": 1
+  },
+  "palette": {
+    "core": "#050814",
+    "ink": "#f8f9ff",
+    "whisper": "#a0a7c0",
+    "breath": "#e6e6fa",
+    "river": "#4169e1",
+    "axon": "#28f0ff",
+    "dendrite": "#c164ff",
+    "success": "#1de9b6",
+    "warning": "#ffcb6b",
+    "danger": "#ff5370"
+  },
+  "roles": {
+    "background": "{palette.core}",
+    "text": "{palette.ink}",
+    "textMuted": "{palette.whisper}",
+
+    "cursorBg": "{palette.axon}",
+    "cursorFg": "{palette.core}",
+    "selectionBg": "{palette.river}",
+    "selectionFg": "{palette.ink}",
+
+    "accentPrimary": "{palette.river}",
+    "accentSecondary": "{palette.dendrite}",
+    "accentSoft": "{palette.breath}",
+
+    "ok": "{palette.success}",
+    "warn": "{palette.warning}",
+    "error": "{palette.danger}",
+
+    "borderStyle": "none",
+    "panelBorder": "none",
+    "separator": "{palette.core}"
+  },
+  "notes": {
+    "intent": [
+      "No borders. Panels float.",
+      "Attention is glow (selection/cursor), not outlines.",
+      "River (royal blue) is the channel; Axon (cyan) rides on top.",
+      "Breath (lavender) is the mist/soft highlight."
+    ]
+  }
+}
