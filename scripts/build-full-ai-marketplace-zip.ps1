@@ -27,6 +27,7 @@ $include = @(
   'fire',
   'scripts',
   'themes',
+  'ai_marketplace',
   'memory\2026-02-14.md',
   'memory\2026-02-14.summary.json'
 )
