@@ -1,0 +1,43 @@
+{
+  "id": "demo-001",
+  "title": "Adaptive Microgrids with Community Incentive Contracts",
+  "one_liner": "A microgrid controller that uses simple incentive contracts to shift demand and stabilize renewables.",
+  "problem": "Renewable-heavy grids face volatility; communities need resilience without expensive overbuild.",
+  "mechanism_steps": [
+    "Measure local generation/consumption in 1–5 minute intervals.",
+    "Publish a rolling set of incentive prices for flexible loads (EV charging, HVAC, water heating).",
+    "Use a transparent contract rule-set so households can opt-in and predict rewards.",
+    "Run a controller that targets frequency/voltage stability while respecting opt-in constraints."
+  ],
+  "required_inputs": [
+    "smart meters",
+    "local controller",
+    "flexible loads",
+    "basic comms"
+  ],
+  "constraints": [
+    "requires opt-in participation",
+    "privacy-preserving aggregation needed"
+  ],
+  "failure_modes": [
+    "low participation",
+    "communication outages",
+    "perverse incentive edge cases"
+  ],
+  "validation_plan": [
+    "Simulate with historical load + solar data.",
+    "Pilot on a small neighborhood microgrid with opt-in EV owners.",
+    "Measure stability events and participant satisfaction."
+  ],
+  "risks": [
+    "privacy",
+    "equity impacts if incentives favor certain households"
+  ],
+  "tags": [
+    "energy",
+    "resilience",
+    "incentives"
+  ],
+  "created_at": "2026-02-14T23:58:51.160187",
+  "source": "demo"
+}
