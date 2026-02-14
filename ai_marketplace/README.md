@@ -6,11 +6,22 @@ A tiny local-only web app that demonstrates:
 - verifier (prohibited words)
 - market stats ledger (JSONL in `memory/market-stats.jsonl`)
 
+## Important: Python version
+
+You're currently on **Python 3.14**.
+
+- **Pydantic v1 (1.10.x) is not compatible with Python 3.14** (it raises runtime config/type inference errors).
+- This app therefore targets **FastAPI + Pydantic v2**, which requires `pydantic-core` wheels.
+
+If installing `pydantic-core` fails or tries to build from source, the quickest fix is:
+
+- Install **Python 3.12 or 3.13** and use that interpreter for the app.
+
 ## Run
 
 ```powershell
-pip install -r ai_marketplace\requirements.txt
-powershell -ExecutionPolicy Bypass -File .\scripts\start-ai-marketplace.ps1
+py -3.13 -m pip install -r ai_marketplace\requirements.txt
+py -3.13 -m uvicorn ai_marketplace.app:app --host 127.0.0.1 --port 9997
 ```
 
 Then open:
