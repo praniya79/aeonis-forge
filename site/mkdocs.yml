@@ -1,7 +1,7 @@
 site_name: Aeonis Forge
 site_description: A perpetual innovation engine.
-site_url: https://example.com
-repo_url: https://github.com/<you>/aeonis-forge
+site_url: https://aeonisforge.com
+repo_url: https://github.com/praniya79/aeonis-forge
 repo_name: aeonis-forge
 
 theme:
