@@ -52,6 +52,11 @@ def cmd_demo(out_dir: Path) -> int:
 
     (out_dir / f"{slug}.json").write_text(c.model_dump_json(indent=2), encoding="utf-8")
 
+    # Optional: also drop into MkDocs site if present
+    mkdocs_posts = Path(__file__).resolve().parents[2] / "site" / "docs" / "posts"
+    if mkdocs_posts.exists():
+        (mkdocs_posts / f"{slug}.md").write_text(render_markdown(c), encoding="utf-8")
+
     print(json.dumps({"ok": True, "slug": slug, "post": str(post_path), "typst": str(typ_path)}, indent=2))
     return 0
 

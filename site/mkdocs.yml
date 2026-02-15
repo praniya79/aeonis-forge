@@ -1,0 +1,26 @@
+site_name: Aeonis Forge
+site_description: A perpetual innovation engine.
+site_url: https://example.com
+repo_url: https://github.com/<you>/aeonis-forge
+repo_name: aeonis-forge
+
+theme:
+  name: material
+  features:
+    - navigation.instant
+    - navigation.tracking
+    - search.suggest
+    - search.highlight
+
+markdown_extensions:
+  - admonition
+  - toc:
+      permalink: true
+  - pymdownx.superfences
+  - pymdownx.details
+
+nav:
+  - Home: index.md
+  - Posts:
+      - posts/index.md
+      - "Adaptive Microgrids (demo)": posts/adaptive-microgrids-with-community-incentive-contracts.md
