@@ -13,3 +13,6 @@ site/resources/
 
 # Local data
 data/
+
+# Vault (hard blueprints live here; never commit)
+vault/
