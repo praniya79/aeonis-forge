@@ -16,3 +16,7 @@ data/
 
 # Vault (hard blueprints live here; never commit)
 vault/
+
+# Email integration secrets
+e-mail-integration/data/
+email-integration/data/
