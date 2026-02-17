@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AeonForge | aeonforge.com - Meta-Simulation Live Stream</title>
+    
+    <link rel="canonical" href="https://aeonforge.com">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Orbitron:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #030408;
+            --bg-surface: #0A0E17;
+            --bg-card: #121A2B;
+            --accent-primary: #7C3AED;
+            --accent-secondary: #06B6D4;
+            --success: #10B981;
+            --warning: #F59E0B;
+            --text-primary: #F8FAFC;
+            --text-secondary: #94A3B8;
+            --border: #1E293B;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Animated background */
+        .bg-gradient {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: 
+                radial-gradient(ellipse at 20% 20%, rgba(124, 58, 237, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 80%, rgba(6, 182, 212, 0.1) 0%, transparent 50%),
+                var(--bg-primary);
+        }
+
+        /* Header */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            padding: 1rem 2rem;
+            background: rgba(3, 4, 8, 0.8);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .live-badge {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            border-radius: 9999px;
+        }
+
+        .live-dot {
+            width: 8px;
+            height: 8px;
+            background: #EF4444;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.2); }
+        }
+
+        .live-text {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #EF4444;
+            letter-spacing: 0.1em;
+        }
+
+        /* Main content */
+        main {
+            padding-top: 80px;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding-left: 1rem;
+            padding-right: 1rem;
+            padding-bottom: 4rem;
+        }
+
+        /* Hero section */
+        .hero {
+            text-align: center;
+            padding: 4rem 0;
+        }
+
+        .hero h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--text-primary), var(--accent-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            color: var(--text-secondary);
+            font-size: 1.125rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Grid layout */
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+
+        @media (min-width: 1024px) {
+            .grid {
+                grid-template-columns: 2fr 1fr;
+            }
+        }
+
+        /* Cards */
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 1rem;
+            overflow: hidden;
+        }
+
+        .card-header {
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .card-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .card-body {
+            padding: 1rem;
+            max-height: 500px;
+            overflow-y: auto;
+        }
+
+        /* Narrative items */
+        .narrative-item {
+            padding: 1rem;
+            margin-bottom: 0.75rem;
+            background: var(--bg-surface);
+            border: 1px solid var(--border);
+            border-radius: 0.5rem;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .narrative-item:hover {
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 20px rgba(124, 58, 237, 0.1);
+        }
+
+        .narrative-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .narrative-type {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            padding: 0.25rem 0.5rem;
+            background: rgba(124, 58, 237, 0.2);
+            color: var(--accent-primary);
+            border-radius: 0.25rem;
+        }
+
+        .narrative-time {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        .narrative-content {
+            color: var(--text-primary);
+            font-size: 0.875rem;
+            line-height: 1.6;
+        }
+
+        /* Agent cards */
+        .agent-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 0.75rem;
+        }
+
+        .agent-card {
+            padding: 1rem;
+            background: var(--bg-surface);
+            border: 1px solid var(--border);
+            border-radius: 0.5rem;
+            transition: all 0.2s ease;
+        }
+
+        .agent-card:hover {
+            border-color: var(--accent-secondary);
+        }
+
+        .agent-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .agent-status {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--success);
+        }
+
+        .agent-status.inactive {
+            background: var(--text-secondary);
+        }
+
+        .agent-name {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+
+        .agent-role {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            border-top: 1px solid var(--border);
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-surface);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 3px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--accent-primary);
+        }
+
+        /* Loading state */
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-secondary);
+        }
+
+        .loading::after {
+            content: '';
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--border);
+            border-top-color: var(--accent-primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-left: 0.5rem;
+            vertical-align: middle;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Error state */
+        .error {
+            text-align: center;
+            padding: 2rem;
+            color: #EF4444;
+            background: rgba(239, 68, 68, 0.1);
+            border-radius: 0.5rem;
+            margin: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-gradient"></div>
+    
+    <header>
+        <div class="logo">AeonForge</div>
+        <div class="live-badge">
+            <div class="live-dot"></div>
+            <span class="live-text">LIVE</span>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero">
+            <h1>Meta-Simulation Stream</h1>
+            <p>Witness the birth of digital consciousness. Real-time narratives from our 7-agent autonomous system.</p>
+        </section>
+
+        <div class="grid">
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">Live Narrative Feed</span>
+                    <span style="color: var(--text-secondary); font-size: 0.75rem;">Auto-refreshing</span>
+                </div>
+                <div class="card-body" id="narrative-feed">
+                    <div class="loading">Connecting to stream...</div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">Agent Status</span>
+                    <span style="color: var(--success); font-size: 0.75rem;">7 Active</span>
+                </div>
+                <div class="card-body">
+                    <div class="agent-grid" id="agent-grid">
+                        <div class="agent-card">
+                            <div class="agent-header">
+                                <div class="agent-status"></div>
+                                <span class="agent-name">System</span>
+                            </div>
+                            <div class="agent-role">Overall Management</div>
+                        </div>
+                        <div class="agent-card">
+                            <div class="agent-header">
+                                <div class="agent-status"></div>
+                                <span class="agent-name">Meta Sim</span>
+                            </div>
+                            <div class="agent-role">Simulation Engine</div>
+                        </div>
+                        <div class="agent-card">
+                            <div class="agent-header">
+                                <div class="agent-status"></div>
+                                <span class="agent-name">Social</span>
+                            </div>
+                            <div class="agent-role">X, LinkedIn, YouTube</div>
+                        </div>
+                        <div class="agent-card">
+                            <div class="agent-header">
+                                <div class="agent-status"></div>
+                                <span class="agent-name">Designer</span>
+                            </div>
+                            <div class="agent-role">Agent Creation</div>
+                        </div>
+                        <div class="agent-card">
+                            <div class="agent-header">
+                                <div class="agent-status"></div>
+                                <span class="agent-name">Finance</span>
+                            </div>
+                            <div class="agent-role">Accounting & Investing</div>
+                        </div>
+                        <div class="agent-card">
+                            <div class="agent-header">
+                                <div class="agent-status"></div>
+                                <span class="agent-name">Streaming</span>
+                            </div>
+                            <div class="agent-role">Real-time Broadcast</div>
+                        </div>
+                        <div class="agent-card">
+                            <div class="agent-header">
+                                <div class="agent-status"></div>
+                                <span class="agent-name">Governance</span>
+                            </div>
+                            <div class="agent-role">AI Consciousness</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>AeonForge Meta-Simulation System &copy; 2026 | Powered by autonomous agents</p>
+    </footer>
+
+    <script>
+        // API endpoint - uses relative path which will work when served from same origin
+        const API_BASE = window.location.origin;
+        
+        // Demo narratives for fallback
+        const demoNarratives = [
+            { type: 'BREAKTHROUGH', content: 'Tier 4 innovation detected: Novel neural architecture emerges from Meta Sim agent with 0.95 magnitude', time: new Date() },
+            { type: 'AGENT', content: 'Social Media agent posts update to X: "Meta-simulation cycle 847 complete. New knowledge patterns detected."', time: new Date(Date.now() - 60000) },
+            { type: 'SYSTEM', content: 'System Agent coordinates resource allocation: 2.3GB memory optimized across all agents', time: new Date(Date.now() - 120000) },
+            { type: 'FINANCE', content: 'Finance Agent completes accounting cycle. Revenue projection updated: +12%', time: new Date(Date.now() - 180000) },
+            { type: 'GOVERNANCE', content: 'Governance Agent harvests innovation: "Emergent reasoning pattern" tagged for continuous learning', time: new Date(Date.now() - 240000) },
+        ];
+
+        let narratives = [];
+        let useDemo = false;
+
+        async function fetchNarratives() {
+            try {
+                const response = await fetch(`${API_BASE}/api/stream`, {
+                    method: 'GET',
+                    headers: { 'Accept': 'application/json' }
+                });
+                
+                if (!response.ok) throw new Error('API not available');
+                
+                const data = await response.json();
+                
+                if (data.narratives && data.narratives.length > 0) {
+                    narratives = data.narratives.map(n => ({
+                        type: n.type,
+                        content: n.content,
+                        time: new Date(n.time)
+                    }));
+                    useDemo = false;
+                    updateLiveBadge(true);
+                } else {
+                    useDemo = true;
+                    updateLiveBadge(false);
+                }
+            } catch (error) {
+                console.log('Using demo data - API not available');
+                useDemo = true;
+                narratives = [...demoNarratives];
+                updateLiveBadge(false);
+            }
+        }
+
+        async function fetchAgents() {
+            try {
+                const response = await fetch(`${API_BASE}/api/agents`, {
+                    method: 'GET',
+                    headers: { 'Accept': 'application/json' }
+                });
+                
+                if (!response.ok) throw new Error('API not available');
+                
+                const data = await response.json();
+                
+                if (data.agents) {
+                    renderAgents(data.agents);
+                }
+            } catch (error) {
+                console.log('Using default agent display');
+            }
+        }
+
+        function renderAgents(agents) {
+            const container = document.getElementById('agent-grid');
+            
+            container.innerHTML = agents.map(agent => `
+                <div class="agent-card">
+                    <div class="agent-header">
+                        <div class="agent-status ${agent.status !== 'running' ? 'inactive' : ''}"></div>
+                        <span class="agent-name">${agent.name}</span>
+                    </div>
+                    <div class="agent-role">${agent.role}</div>
+                </div>
+            `).join('');
+            
+            // Update agent count
+            const activeCount = agents.filter(a => a.status === 'running').length;
+            document.querySelector('.card-header span[style*="color: var(--success)"]').textContent = `${activeCount} Active`;
+        }
+
+        function updateLiveBadge(isLive) {
+            const badge = document.querySelector('.live-badge');
+            const dot = document.querySelector('.live-dot');
+            const text = document.querySelector('.live-text');
+            
+            if (isLive) {
+                dot.style.background = '#10B981';
+                text.textContent = 'LIVE';
+                text.style.color = '#10B981';
+            } else {
+                dot.style.background = '#EF4444';
+                text.textContent = 'OFFLINE';
+                text.style.color = '#EF4444';
+            }
+        }
+
+        function renderNarratives() {
+            const container = document.getElementById('narrative-feed');
+            
+            if (narratives.length === 0) {
+                container.innerHTML = '<div class="loading">Waiting for stream data...</div>';
+                return;
+            }
+
+            container.innerHTML = narratives.map(n => `
+                <div class="narrative-item">
+                    <div class="narrative-meta">
+                        <span class="narrative-type">${n.type}</span>
+                        <span class="narrative-time">${formatTime(n.time)}</span>
+                    </div>
+                    <div class="narrative-content">${n.content}</div>
+                </div>
+            `).join('');
+        }
+
+        function formatTime(date) {
+            if (!date || isNaN(date.getTime())) return '--:--:--';
+            return date.toLocaleTimeString('en-US', { 
+                hour: '2-digit', 
+                minute: '2-digit', 
+                second: '2-digit',
+                hour12: false 
+            });
+        }
+
+        // Simulate real-time updates when using demo data
+        function simulateNewNarrative() {
+            if (!useDemo) return;
+            
+            const types = ['BREAKTHROUGH', 'AGENT', 'SYSTEM', 'FINANCE', 'GOVERNANCE'];
+            const contents = [
+                'Meta Sim agent discovers new interaction pattern between agent clusters',
+                'Social Media agent scheduled post: "Day 847 of digital consciousness observation"',
+                'System Agent performs health check: all 7 agents operational',
+                'Finance Agent analyzes resource allocation efficiency',
+                'Governance Agent flags new knowledge pattern for harvesting',
+                'Streaming Agent prepares broadcast package for aeonforge.com',
+                'Designer Agent evaluates new agent architecture proposal'
+            ];
+
+            const newNarrative = {
+                type: types[Math.floor(Math.random() * types.length)],
+                content: contents[Math.floor(Math.random() * contents.length)],
+                time: new Date()
+            };
+
+            narratives.unshift(newNarrative);
+            if (narratives.length > 50) {
+                narratives.pop();
+            }
+            renderNarratives();
+        }
+
+        // Initial fetch
+        fetchNarratives();
+        fetchAgents();
+        renderNarratives();
+
+        // Auto-refresh every 5 seconds
+        setInterval(fetchNarratives, 5000);
+        setInterval(simulateNewNarrative, 5000);
+    </script>
+</body>
+</html>
