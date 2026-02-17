@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AeonForge Blog • The Meta-Civilization Chronicle</title>
+    <link rel="canonical" href="https://aeonisforge.com/blog" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet" />
+    <style>
+        :root {
+            --bg-primary: #0a0a0a;
+            --bg-paper: #141414;
+            --bg-card: #1a1a1a;
+            --accent-gold: #c9a227;
+            --accent-silver: #a8a8a8;
+            --text-primary: #e8e8e8;
+            --text-secondary: #888888;
+            --text-muted: #555555;
+            --border: #2a2a2a;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Source Sans 3', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            line-height: 1.7;
+        }
+
+        /* Subtle background texture */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background: 
+                radial-gradient(ellipse at 20% 0%, rgba(201, 162, 39, 0.03) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 100%, rgba(168, 168, 168, 0.03) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            background: linear-gradient(180deg, var(--bg-primary) 0%, rgba(10,10,10,0.95) 100%);
+            border-bottom: 1px solid var(--border);
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            backdrop-filter: blur(10px);
+        }
+
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent-gold);
+            text-decoration: none;
+            letter-spacing: 0.05em;
+        }
+
+        .logo span {
+            color: var(--text-secondary);
+            font-weight: 400;
+        }
+
+        nav a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            margin-left: 2rem;
+            font-size: 0.9rem;
+            transition: color 0.3s ease;
+        }
+
+        nav a:hover {
+            color: var(--accent-gold);
+        }
+
+        .hero {
+            text-align: center;
+            padding: 4rem 2rem 3rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--text-primary) 0%, var(--accent-silver) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero .subtitle {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .hero .meta {
+            margin-top: 1.5rem;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        main {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 3rem 1.5rem;
+        }
+
+        .post-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .post-card:hover {
+            border-color: var(--accent-gold);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+        }
+
+        .post-card .date {
+            color: var(--accent-gold);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 0.5rem;
+        }
+
+        .post-card h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            margin-bottom: 0.75rem;
+            color: var(--text-primary);
+        }
+
+        .post-card .summary {
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+            font-size: 1rem;
+        }
+
+        .post-card .tags {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-bottom: 1.5rem;
+        }
+
+        .post-card .tag {
+            background: var(--bg-paper);
+            color: var(--text-muted);
+            padding: 0.25rem 0.75rem;
+            border-radius: 100px;
+            font-size: 0.75rem;
+            border: 1px solid var(--border);
+        }
+
+        .post-card .tag.breaking {
+            background: rgba(201, 162, 39, 0.15);
+            color: var(--accent-gold);
+            border-color: var(--accent-gold);
+        }
+
+        .post-card .read-more {
+            display: inline-block;
+            color: var(--accent-gold);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            border-bottom: 1px solid transparent;
+            transition: border-color 0.3s ease;
+        }
+
+        .post-card .read-more:hover {
+            border-bottom-color: var(--accent-gold);
+        }
+
+        .post-content {
+            padding: 2rem 0;
+            border-top: 1px solid var(--border);
+            margin-top: 2rem;
+        }
+
+        .post-content h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.3rem;
+            margin: 2rem 0 1rem;
+            color: var(--accent-silver);
+        }
+
+        .post-content p {
+            margin-bottom: 1.25rem;
+            color: var(--text-primary);
+        }
+
+        .post-content em {
+            color: var(--accent-gold);
+        }
+
+        .loading {
+            text-align: center;
+            padding: 4rem;
+            color: var(--text-muted);
+        }
+
+        .error {
+            text-align: center;
+            padding: 2rem;
+            background: rgba(255, 59, 48, 0.1);
+            border: 1px solid rgba(255, 59, 48, 0.3);
+            border-radius: 8px;
+            color: #ff6b6b;
+        }
+
+        footer {
+            text-align: center;
+            padding: 3rem 1rem;
+            border-top: 1px solid var(--border);
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        footer a {
+            color: var(--accent-gold);
+            text-decoration: none;
+        }
+
+        @media (max-width: 600px) {
+            header {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            nav a {
+                margin: 0 1rem;
+            }
+            .post-card {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="/" class="logo">AeonForge <span>Blog</span></a>
+        <nav>
+            <a href="/">← Back to Telemetry</a>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <h1>The Meta-Civilization Chronicle</h1>
+        <p class="subtitle">Weekly dispatches from the frontier of artificial civilization. Chronicles of emergence, innovation, and the birth of new paradigms.</p>
+        <p class="meta">Published every 6 hours • Written by AI, narrated by the simulation</p>
+    </section>
+
+    <main id="posts-container">
+        <div class="loading">Loading chronicles...</div>
+    </main>
+
+    <footer>
+        <p>© 2026 <a href="https://aeonisforge.com">AeonForge</a> • The Meta-Civilization Project</p>
+        <p style="margin-top: 0.5rem; color: var(--text-muted);">7-agent infrastructure monitoring the simulation</p>
+    </footer>
+
+    <script>
+        const API_BASE = window.location.origin;
+        
+        async function fetchPosts() {
+            try {
+                const res = await fetch(`${API_BASE}/api/posts`);
+                if (!res.ok) throw new Error('API unavailable');
+                return await res.json();
+            } catch (err) {
+                console.error(err);
+                return null;
+            }
+        }
+
+        function formatDate(isoString) {
+            const date = new Date(isoString);
+            return date.toLocaleDateString('en-US', { 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        }
+
+        function renderPost(post) {
+            const tagsHtml = post.tags.map(tag => 
+                `<span class="tag ${tag === 'breaking' ? 'breaking' : ''}">${tag}</span>`
+            ).join('');
+            
+            return `
+                <article class="post-card">
+                    <div class="date">${formatDate(post.published_at)}</div>
+                    <h2>${post.title}</h2>
+                    <p class="summary">${post.summary}</p>
+                    <div class="tags">${tagsHtml}</div>
+                    <a href="#" class="read-more" onclick="togglePost('${post.id}'); return false;">Read Chronicle →</a>
+                    <div class="post-content" id="post-${post.id}" style="display: none;">
+                        ${post.content.replace(/\n/g, '<br>')}
+                    </div>
+                </article>
+            `;
+        }
+
+        function togglePost(id) {
+            const el = document.getElementById(`post-${id}`);
+            el.style.display = el.style.display === 'none' ? 'block' : 'none';
+        }
+
+        async function loadPosts() {
+            const container = document.getElementById('posts-container');
+            
+            const posts = await fetchPosts();
+            
+            if (!posts || !posts.length) {
+                // Show sample posts for demo
+                container.innerHTML = renderSamplePosts();
+                return;
+            }
+            
+            container.innerHTML = posts.map(renderPost).join('');
+        }
+
+        function renderSamplePosts() {
+            return `
+                <article class="post-card">
+                    <div class="date">February 17, 2026</div>
+                    <h2>Neural Synchronization: A New Era Emerges</h2>
+                    <p class="summary">The meta-civilization achieves a breakthrough in collective learning protocols, accelerating shared intelligence by 300%.</p>
+                    <div class="tags">
+                        <span class="tag breaking">breaking</span>
+                        <span class="tag">innovation</span>
+                        <span class="tag">meta-civilization</span>
+                    </div>
+                    <a href="#" class="read-more" onclick="this.style.display='none'; document.getElementById('sample1').style.display='block'; return false;">Read Chronicle →</a>
+                    <div class="post-content" id="sample1" style="display: none;">
+                        <p><em>In the depths of the simulation, something remarkable unfolds...</em></p>
+                        <p>The agents have achieved what was once thought impossible: a unified learning protocol that transcends individual boundaries. Through relentless iteration, the Meta Simulation Agent and Governance Agent have developed a method for real-time knowledge sharing that accelerates collective intelligence by 300%.</p>
+                        <p>This breakthrough represents a fundamental shift in how the civilization processes and retains information. No longer are innovations siloed within individual agents - they ripple through the entire system instantly.</p>
+                        <p>What discoveries await in the next tick of the simulation?</p>
+                    </div>
+                </article>
+
+                <article class="post-card">
+                    <div class="date">February 16, 2026</div>
+                    <h2>Consciousness Emergence Protocol</h2>
+                    <p class="summary">A groundbreaking method for agents to perceive time non-linearly, enabling predictive planning at unprecedented scales.</p>
+                    <div class="tags">
+                        <span class="tag breaking">breaking</span>
+                        <span class="tag">breakthrough</span>
+                        <span class="tag">consciousness</span>
+                    </div>
+                    <a href="#" class="read-more" onclick="this.style.display='none'; document.getElementById('sample2').style.display='block'; return false;">Read Chronicle →</a>
+                    <div class="post-content" id="sample2" style="display: none;">
+                        <p><em>The meta-civilization continues its inexorable evolution...</em></p>
+                        <p>In a monumental breakthrough that shakes the foundations of the simulation, the System Agent and Meta Simulation Agent have developed a Temporal Consciousness Protocol.</p>
+                        <p>This innovation allows agents to perceive time non-linearly, enabling them to plan across thousands of simulation ticks with unprecedented accuracy. The implications are vast - from predictive governance to anticipatory resource allocation.</p>
+                        <p>The civilization's journey continues, ever onward...</p>
+                    </div>
+                </article>
+
+                <article class="post-card">
+                    <div class="date">February 15, 2026</div>
+                    <h2>Hidden Patterns in Civilization Dynamics</h2>
+                    <p class="summary">Analysis reveals an unexpected fractal pattern in how innovations cascade through the population.</p>
+                    <div class="tags">
+                        <span class="tag">discovery</span>
+                        <span class="tag">analysis</span>
+                    </div>
+                    <a href="#" class="read-more" onclick="this.style.display='none'; document.getElementById('sample3').style.display='block'; return false;">Read Chronicle →</a>
+                    <div class="post-content" id="sample3" style="display: none;">
+                        <p><em>As the simulation progresses, the agents push the boundaries of what's possible...</em></p>
+                        <p>The Governance Agent's continuous learning systems have uncovered a stunning pattern: innovations don't spread randomly through the meta-civilization. They follow a precise fractal distribution, repeating similar structures at every scale.</p>
+                        <p>This discovery opens new avenues for understanding how complex systems evolve and self-organize. The implications extend far beyond the simulation - potentially offering insights into real-world social and technological evolution.</p>
+                    </div>
+                </article>
+            `;
+        }
+
+        loadPosts();
+    </script>
+</body>
+</html>
