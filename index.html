@@ -466,6 +466,37 @@
             font-size: 0.75rem;
             color: var(--accent-error);
         }
+
+        /* OpenClaw Status */
+        .openclaw-status {
+            margin-top: 0.75rem;
+            padding: 0.5rem;
+            border-radius: 3px;
+            background: var(--bg-surface);
+            border: 1px solid var(--border);
+            font-size: 0.7rem;
+        }
+
+        .openclaw-status.connected {
+            border-color: var(--accent-tertiary);
+        }
+
+        .openclaw-status.disconnected {
+            border-color: var(--accent-error);
+        }
+
+        .openclaw-status .label {
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .openclaw-status .insight {
+            margin-top: 0.35rem;
+            color: var(--text-secondary);
+            font-style: italic;
+            line-height: 1.4;
+        }
     </style>
 </head>
 <body>
@@ -482,6 +513,7 @@
         <section class="hero">
             <h1>System Telemetry</h1>
             <p>7-agent infrastructure monitoring the meta-simulation. Watch system health, resource allocation, and simulation metrics in real time.</p>
+            <div id="openclaw-status" class="openclaw-status"></div>
         </section>
 
         <section class="ticker">
@@ -685,6 +717,45 @@
 
         refresh();
         setInterval(refresh, REFRESH_INTERVAL);
+
+        // OpenClaw Integration
+        async function checkOpenClawStatus() {
+            const statusEl = document.getElementById('openclaw-status');
+            try {
+                const res = await fetch(`${API_BASE}/api/openclaw/status`);
+                const data = await res.json();
+                if (data.available) {
+                    statusEl.className = 'openclaw-status connected';
+                    statusEl.innerHTML = `<span class="label">🤖 OpenClaw Connected</span>`;
+                    // Fetch AI insight
+                    fetchAIInsight();
+                } else {
+                    statusEl.className = 'openclaw-status disconnected';
+                    statusEl.innerHTML = `<span class="label">🤖 OpenClaw: ${data.message}</span>`;
+                }
+            } catch (err) {
+                statusEl.className = 'openclaw-status disconnected';
+                statusEl.innerHTML = `<span class="label">🤖 OpenClaw: Gateway unreachable</span>`;
+            }
+        }
+
+        async function fetchAIInsight() {
+            try {
+                const res = await fetch(`${API_BASE}/api/openclaw/insight`);
+                const data = await res.json();
+                if (data.insight) {
+                    const statusEl = document.getElementById('openclaw-status');
+                    const current = statusEl.innerHTML;
+                    statusEl.innerHTML = current + `<div class="insight">"${data.insight}"</div>`;
+                }
+            } catch (err) {
+                console.log('AI insight unavailable');
+            }
+        }
+
+        // Check OpenClaw status on load
+        checkOpenClawStatus();
+        setInterval(checkOpenClawStatus, 30000); // Check every 30 seconds
     </script>
 </body>
 </html>

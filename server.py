@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 AeonForge Streaming API Server - Enhanced Version
-Serves real-time simulation data with rich narratives and innovations
+Serves real-time simulation data with rich narratives, innovations, and OpenClaw integration
 """
 
 import csv
@@ -9,6 +9,7 @@ import json
 import logging
 import random
 import math
+import requests
 from datetime import datetime
 from http.server import HTTPServer, BaseHTTPRequestHandler
 from pathlib import Path
@@ -22,6 +23,12 @@ STATE_FILE = BASE_DIR / "state.json"
 LOG_FILE = BASE_DIR / "logs" / "aeonforge.log"
 STREAM_LOG = BASE_DIR / "logs" / "streaming.log"
 INNOVATIONS_FILE = BASE_DIR / "harvested_innovations.csv"
+
+# OpenClaw Gateway Configuration
+OPENCLAW_HOST = "127.0.0.1"
+OPENCLAW_PORT = 18789
+OPENCLAW_TOKEN = "3f36e764806969f0989e89ebe07d7d3987020afedb496016"
+OPENCLAW_URL = f"http://{OPENCLAW_HOST}:{OPENCLAW_PORT}"
 
 # Enhanced agent metadata with expanded roles
 AGENT_METADATA = {
@@ -129,6 +136,87 @@ BREAKTHROUGH_MESSAGES = [
     "🔮 VISION: Future-state prediction accuracy improved dramatically!",
     "⚡ EVOLUTION: New agent archetype spawned from collective intelligence!",
 ]
+
+
+# OpenClaw Communication Functions
+def check_openclaw_status() -> Dict[str, Any]:
+    """Check if OpenClaw gateway is available"""
+    try:
+        response = requests.get(
+            f"{OPENCLAW_URL}/health",
+            headers={"Authorization": f"Bearer {OPENCLAW_TOKEN}"},
+            timeout=2
+        )
+        return {
+            "available": response.status_code == 200,
+            "status": "connected" if response.status_code == 200 else "error",
+            "message": "OpenClaw gateway responding" if response.status_code == 200 else "Gateway error"
+        }
+    except requests.exceptions.ConnectionError:
+        return {
+            "available": False,
+            "status": "disconnected",
+            "message": "OpenClaw gateway not reachable on port 18789"
+        }
+    except Exception as e:
+        return {
+            "available": False,
+            "status": "error",
+            "message": str(e)
+        }
+
+
+def query_openclaw(prompt: str, model: str = "claude") -> Dict[str, Any]:
+    """Send a query to OpenClaw and get AI response"""
+    try:
+        response = requests.post(
+            f"{OPENCLAW_URL}/v1/messages",
+            headers={
+                "Authorization": f"Bearer {OPENCLAW_TOKEN}",
+                "Content-Type": "application/json"
+            },
+            json={
+                "model": model,
+                "max_tokens": 1024,
+                "messages": [{"role": "user", "content": prompt}]
+            },
+            timeout=30
+        )
+        if response.status_code == 200:
+            data = response.json()
+            return {
+                "success": True,
+                "response": data.get("content", [{}])[0].get("text", ""),
+                "model": model
+            }
+        else:
+            return {
+                "success": False,
+                "error": f"OpenClaw error: {response.status_code}"
+            }
+    except Exception as e:
+        return {
+            "success": False,
+            "error": str(e)
+        }
+
+
+def generate_ai_insight(topic: str = "meta-civilization") -> str:
+    """Generate AI insight about the simulation using OpenClaw"""
+    prompt = f"Provide a brief, insightful observation about the current state of a {topic} being monitored by 7 AI agents. Focus on emergence, innovation patterns, or future trajectory. Keep it under 2 sentences."
+    
+    result = query_openclaw(prompt)
+    if result.get("success"):
+        return result.get("response", "")
+    
+    # Fallback if OpenClaw unavailable
+    fallbacks = [
+        "The meta-civilization continues its inexorable evolution, driven by the collective intelligence of 7 specialized agents.",
+        "Innovation emerges from the complex interplay of autonomous agents, each contributing unique capabilities to the whole.",
+        "The simulation reveals emergent patterns that transcend individual agent capabilities, suggesting true collective intelligence.",
+        "Temporal boundaries blur as agents coordinate across simulation ticks, creating a seamless flow of information."
+    ]
+    return random.choice(fallbacks)
 
 
 def read_state() -> Dict[str, Any]:
@@ -359,7 +447,18 @@ class StreamHandler(BaseHTTPRequestHandler):
         self.wfile.write(body)
     
     def do_GET(self):
-        if self.path == "/api/stream":
+        if self.path == "/api/openclaw/status":
+            # Check OpenClaw gateway status
+            status = check_openclaw_status()
+            self._send_json(status)
+        elif self.path == "/api/openclaw/insight":
+            # Generate AI insight via OpenClaw
+            insight = generate_ai_insight()
+            self._send_json({
+                "insight": insight,
+                "timestamp": datetime.utcnow().isoformat(),
+            })
+        elif self.path == "/api/stream":
             overview = build_overview_payload()
             self._send_json({
                 "narratives": overview["narratives"],
