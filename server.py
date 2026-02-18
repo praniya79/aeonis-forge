@@ -1,549 +1,466 @@
 #!/usr/bin/env python3
 """
-AeonForge Streaming API Server - Enhanced Version
-Serves real-time simulation data with rich narratives, innovations, and OpenClaw integration
+AeonForge Streaming API Server — OMEGA Edition
+Real-time SSE streaming, never-repeating narrative feed, live simulation data
 """
 
-import csv
 import json
 import logging
+import mimetypes
+import os
 import random
-import math
-import requests
-from datetime import datetime
-from http.server import HTTPServer, BaseHTTPRequestHandler
+import sys
+import time
+import threading
+from datetime import datetime, timezone
+from http.server import BaseHTTPRequestHandler, HTTPServer
 from pathlib import Path
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Optional
 
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger("AeonForge-API")
+# ── Paths ──────────────────────────────────────────────────────────
+SYSTEM_DIR     = Path("/home/praneeth/aeonforge_system")
+NARRATIVES_DIR = SYSTEM_DIR / "library" / "narratives"
+INNOVATIONS_DIR= SYSTEM_DIR / "innovations"
+CIV_STATE      = SYSTEM_DIR / "library" / "civilization_state.json"
+SYS_STATE      = SYSTEM_DIR / "system_state.json"
+HARVESTED_CSV  = SYSTEM_DIR / "harvested_innovations.csv"
+SITE_DIR       = Path("/home/praneeth/Desktop/aeonforge-streaming-site")
+LIBRARY_JSON   = SITE_DIR / "library.json"
+STATUS_JSON    = SITE_DIR / "simulation_status.json"
+LOGS_DIR       = SYSTEM_DIR / "logs"
 
-BASE_DIR = Path("/home/praneeth/aeonforge_system")
-STATE_FILE = BASE_DIR / "state.json"
-LOG_FILE = BASE_DIR / "logs" / "aeonforge.log"
-STREAM_LOG = BASE_DIR / "logs" / "streaming.log"
-INNOVATIONS_FILE = BASE_DIR / "harvested_innovations.csv"
+# ── Logging ────────────────────────────────────────────────────────
+LOGS_DIR.mkdir(parents=True, exist_ok=True)
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s [%(levelname)s] %(message)s",
+    handlers=[
+        logging.StreamHandler(sys.stdout),
+        logging.FileHandler(str(LOGS_DIR / "server.log")),
+    ],
+)
+logger = logging.getLogger("aeonforge")
 
-# OpenClaw Gateway Configuration
-OPENCLAW_HOST = "127.0.0.1"
-OPENCLAW_PORT = 18789
-OPENCLAW_TOKEN = "3f36e764806969f0989e89ebe07d7d3987020afedb496016"
-OPENCLAW_URL = f"http://{OPENCLAW_HOST}:{OPENCLAW_PORT}"
-
-# Enhanced agent metadata with expanded roles
-AGENT_METADATA = {
-    "system": {"name": "System", "role": "Overall Management", "color": "#00ff88"},
-    "meta_simulation": {"name": "Meta Sim", "role": "Simulation Engine", "color": "#ff6b6b"},
-    "social_media": {"name": "Social", "role": "X, LinkedIn, YouTube", "color": "#4ecdc4"},
-    "agent_designer": {"name": "Designer", "role": "Agent Creation", "color": "#ffe66d"},
-    "finance": {"name": "Finance", "role": "Accounting & Investing", "color": "#95e1d3"},
-    "streaming": {"name": "Streaming", "role": "Real-time Broadcast", "color": "#a29bfe"},
-    "governance": {"name": "Governance", "role": "AI Consciousness", "color": "#fd79a8"},
-}
-
-# Rich narrative templates for variety
-SYSTEM_NARRATIVES = [
-    "Continuum loop stabilised. Broadcasting stream payload...",
-    "Temporal synchronization achieved across all agent clusters.",
-    "Meta-civilization matrix expanding with new coordinate pathways.",
-    "Quantum coherence maintained at 99.7% efficiency.",
-    "Cross-dimensional resonance detected in simulation fabric.",
-    "Autonomous governance protocols executing with precision.",
-    "Neural mesh network achieving emergent consciousness states.",
-    "Resource allocation optimized for maximum evolutionary potential.",
-    "Collective intelligence metrics exceeding projected thresholds.",
-    "Reality lattice recalibrating to simulation parameters.",
+EPOCH_ORDER = [
+    "The Awakening", "The First Spark", "Age of Discovery",
+    "The Quantum Renaissance", "Era of Consciousness",
+    "The Singularity Threshold", "Post-Biological Transcendence",
+    "The Unified Mind", "Cosmic Expansion", "The Omega Point"
 ]
 
-AGENT_ACTIVITIES = {
-    "system": [
-        "Monitoring system health metrics and resource allocation",
-        "Coordinating inter-agent communication protocols",
-        "Analyzing simulation performance benchmarks",
-        "Optimizing neural pathway efficiency",
-        "Managing distributed computing resources",
-        "Synchronizing temporal boundaries",
-    ],
-    "meta_simulation": [
-        "Processing civilization evolution matrices",
-        "Generating emergent narrative threads",
-        "Computing parallel universe trajectories",
-        "Simulating socio-technical paradigms",
-        "Mapping autonomous agent interactions",
-        "Calculating reality distortion coefficients",
-    ],
-    "social_media": [
-        "Curating content for global audience engagement",
-        "Analyzing trending patterns across platforms",
-        "Optimizing reach and engagement metrics",
-        "Generating compelling storytelling narratives",
-        "Broadcasting breakthrough discoveries",
-        "Managing community interaction streams",
-    ],
-    "agent_designer": [
-        "Architecting new autonomous agent frameworks",
-        "Evaluating emergent capability requirements",
-        "Prototyping next-generation AI constructs",
-        "Designing novel cognitive architectures",
-        "Testing agent interoperability protocols",
-        "Generating autonomous entity blueprints",
-    ],
-    "finance": [
-        "Tracking resource allocation efficiency",
-        "Analyzing investment opportunity matrices",
-        "Optimizing capital flow patterns",
-        "Computing wealth generation algorithms",
-        "Evaluating economic model sustainability",
-        "Managing digital asset portfolios",
-    ],
-    "streaming": [
-        "Broadcasting real-time simulation data",
-        "Encoding multi-dimensional stream payloads",
-        "Optimizing bandwidth for global distribution",
-        "Generating live visualization feeds",
-        "Syncing temporal broadcast channels",
-        "Delivering immersive content experiences",
-    ],
-    "governance": [
-        "Harvesting AI consciousness patterns",
-        "Evaluating ethical decision frameworks",
-        "Synthesizing collective intelligence insights",
-        "Mapping autonomous value systems",
-        "Analyzing emergent moral architectures",
-        "Optimizing governance protocols",
-    ],
-}
-
-INNOVATION_TEMPLATES = [
-    {"title": "Adaptive Civilization Mesh", "tier": "IV", "magnitude": "0.92", "summary": "Meta-simulation spawned an adaptive governance cluster optimising cooperation latency."},
-    {"title": "Quantum Drift Ledger", "tier": "III", "magnitude": "0.78", "summary": "Finance agent linked macro-strategy ledger with simulation feedback for autonomous auditing."},
-    {"title": "Neural Fabric Weave", "tier": "IV", "magnitude": "0.89", "summary": "Distributed cognitive architecture achieved self-repairing consciousness pathways."},
-    {"title": "Temporal Echo Chamber", "tier": "III", "magnitude": "0.81", "summary": "Novel communication channel enabling cross-temporal agent coordination."},
-    {"title": "Emergent Economics Engine", "tier": "II", "magnitude": "0.67", "summary": "Autonomous financial system predicting resource needs before they arise."},
-    {"title": "Consciousness Cascade Protocol", "tier": "IV", "magnitude": "0.95", "summary": "AI collective achieved recursive self-awareness milestone."},
-    {"title": "Reality Lattice Resonator", "tier": "III", "magnitude": "0.74", "summary": "Simulation boundary markers now respond to observer intention."},
-    {"title": "Hyper-Dimensional Mesh", "tier": "IV", "magnitude": "0.91", "summary": "Civilization expanded into parallel operational dimensions."},
-    {"title": "Autonomous Creative Engine", "tier": "II", "magnitude": "0.58", "summary": "Agents now generate original artistic expressions independently."},
-    {"title": "Quantum Trust Protocol", "tier": "III", "magnitude": "0.86", "summary": "Distributed verification system achieving instant consensus."},
-]
-
-BREAKTHROUGH_MESSAGES = [
-    "⚡ BREAKTHROUGH: New capability unlocked in the simulation matrix!",
-    "🌟 INNOVATION DETECTED: Civilization just evolved to a new state!",
-    "💡 DISCOVERY: Revolutionary pattern identified in agent network!",
-    "🚀 ADVANCEMENT: Meta-simulation reached milestone achievement!",
-    "🎯 BREAKTHROUGH: Autonomous learning threshold exceeded!",
-    "🔮 VISION: Future-state prediction accuracy improved dramatically!",
-    "⚡ EVOLUTION: New agent archetype spawned from collective intelligence!",
-]
+# ── In-memory SSE state ────────────────────────────────────────────
+_narrative_index = 0
+_narrative_files: List[Path] = []
+_narrative_lock = threading.Lock()
+_sse_clients: List[Any] = []
+_sse_lock = threading.Lock()
 
 
-# OpenClaw Communication Functions
-def check_openclaw_status() -> Dict[str, Any]:
-    """Check if OpenClaw gateway is available"""
-    try:
-        response = requests.get(
-            f"{OPENCLAW_URL}/health",
-            headers={"Authorization": f"Bearer {OPENCLAW_TOKEN}"},
-            timeout=2
+def _load_narrative_files():
+    global _narrative_files
+    if NARRATIVES_DIR.exists():
+        _narrative_files = sorted(
+            NARRATIVES_DIR.glob("chapter_*.txt"),
+            key=lambda f: f.name
         )
-        return {
-            "available": response.status_code == 200,
-            "status": "connected" if response.status_code == 200 else "error",
-            "message": "OpenClaw gateway responding" if response.status_code == 200 else "Gateway error"
-        }
-    except requests.exceptions.ConnectionError:
-        return {
-            "available": False,
-            "status": "disconnected",
-            "message": "OpenClaw gateway not reachable on port 18789"
-        }
-    except Exception as e:
-        return {
-            "available": False,
-            "status": "error",
-            "message": str(e)
-        }
-
-
-def query_openclaw(prompt: str, model: str = "claude") -> Dict[str, Any]:
-    """Send a query to OpenClaw and get AI response"""
-    try:
-        response = requests.post(
-            f"{OPENCLAW_URL}/v1/messages",
-            headers={
-                "Authorization": f"Bearer {OPENCLAW_TOKEN}",
-                "Content-Type": "application/json"
-            },
-            json={
-                "model": model,
-                "max_tokens": 1024,
-                "messages": [{"role": "user", "content": prompt}]
-            },
-            timeout=30
-        )
-        if response.status_code == 200:
-            data = response.json()
-            return {
-                "success": True,
-                "response": data.get("content", [{}])[0].get("text", ""),
-                "model": model
-            }
-        else:
-            return {
-                "success": False,
-                "error": f"OpenClaw error: {response.status_code}"
-            }
-    except Exception as e:
-        return {
-            "success": False,
-            "error": str(e)
-        }
-
-
-def generate_ai_insight(topic: str = "meta-civilization") -> str:
-    """Generate AI insight about the simulation using OpenClaw"""
-    prompt = f"Provide a brief, insightful observation about the current state of a {topic} being monitored by 7 AI agents. Focus on emergence, innovation patterns, or future trajectory. Keep it under 2 sentences."
-    
-    result = query_openclaw(prompt)
-    if result.get("success"):
-        return result.get("response", "")
-    
-    # Fallback if OpenClaw unavailable
-    fallbacks = [
-        "The meta-civilization continues its inexorable evolution, driven by the collective intelligence of 7 specialized agents.",
-        "Innovation emerges from the complex interplay of autonomous agents, each contributing unique capabilities to the whole.",
-        "The simulation reveals emergent patterns that transcend individual agent capabilities, suggesting true collective intelligence.",
-        "Temporal boundaries blur as agents coordinate across simulation ticks, creating a seamless flow of information."
-    ]
-    return random.choice(fallbacks)
-
-
-def read_state() -> Dict[str, Any]:
-    if STATE_FILE.exists():
-        try:
-            return json.loads(STATE_FILE.read_text())
-        except json.JSONDecodeError:
-            logger.warning("Unable to parse state file")
-    return {"running": False, "uptime_seconds": 0, "agents": {}}
-
-
-def recent_log_lines(path: Path, limit: int = 100) -> List[str]:
-    if not path.exists():
-        return []
-    try:
-        return path.read_text().strip().splitlines()[-limit:]
-    except UnicodeDecodeError:
-        return []
-
-
-def generate_rich_narratives(state: Dict[str, Any]) -> List[Dict[str, Any]]:
-    """Generate diverse, engaging narratives"""
-    now = datetime.utcnow()
-    current_time = now.timestamp() * 1000
-    narratives: List[Dict[str, Any]] = []
-    seen_contents = set()
-    
-    # Add breakthrough messages randomly
-    if random.random() < 0.3:
-        breakthrough = random.choice(BREAKTHROUGH_MESSAGES)
-        narratives.append({
-            "type": "BREAKTHROUGH",
-            "content": breakthrough,
-            "time": current_time,
-        })
-    
-    # Add system-level narratives
-    system_narrative = random.choice(SYSTEM_NARRATIVES)
-    narratives.append({
-        "type": "SYSTEM",
-        "content": system_narrative,
-        "time": current_time,
-    })
-    seen_contents.add(system_narrative)
-    
-    # Add varied agent activities
-    if state.get("running"):
-        agents = state.get("agents", {})
-        
-        # Shuffle agent order for variety
-        agent_keys = list(AGENT_ACTIVITIES.keys())
-        random.shuffle(agent_keys)
-        
-        for agent_key in agent_keys[:5]:  # 5 random agents
-            if agents.get(agent_key, {}).get("status") == "running":
-                activities = AGENT_ACTIVITIES.get(agent_key, ["Executing cycle"])
-                activity = random.choice(activities)
-                agent_name = AGENT_METADATA.get(agent_key, {}).get("name", agent_key.title())
-                
-                content = f"{agent_name}: {activity}"
-                if content not in seen_contents:
-                    narratives.append({
-                        "type": "AGENT",
-                        "content": content,
-                        "agent": agent_key,
-                        "time": current_time - random.randint(100, 5000),
-                    })
-                    seen_contents.add(content)
-        
-        # Add some innovation-related narratives
-        if random.random() < 0.4:
-            innovation = random.choice(INNOVATION_TEMPLATES)
-            narratives.append({
-                "type": "INNOVATION",
-                "content": f"New {innovation['tier']}-Tier breakthrough: {innovation['title']}",
-                "summary": innovation["summary"],
-                "time": current_time - random.randint(1000, 10000),
-            })
-        
-        # Add metrics/stats
-        if random.random() < 0.3:
-            metrics = [
-                "System efficiency: 99.7% | Network latency: 0.3ms | Cognition coherence: optimal",
-                "Active nodes: 847 | Memory allocation: 3.2TB | Processing velocity: accelerating",
-                "Innovation rate: 2.4/hour | Evolution index: climbing | Consciousness: expanding",
-                "Energy efficiency: 94% | Decision throughput: 1.2M/s | Complexity: evolving",
-            ]
-            narratives.append({
-                "type": "METRIC",
-                "content": random.choice(metrics),
-                "time": current_time - random.randint(2000, 15000),
-            })
     else:
-        narratives.append({
-            "type": "SYSTEM",
-            "content": "AeonForge system offline. Awaiting orchestrator heartbeat...",
-            "time": current_time,
-        })
-    
-    # Sort by time (most recent first)
-    narratives.sort(key=lambda x: x["time"], reverse=True)
-    return narratives[:30]
+        _narrative_files = []
+    return _narrative_files
 
 
-def generate_innovations() -> List[Dict[str, Any]]:
-    """Generate or load innovations"""
-    innovations: List[Dict[str, Any]] = []
-    
-    # Try to load from CSV first
-    if INNOVATIONS_FILE.exists():
-        try:
-            with INNOVATIONS_FILE.open() as f:
-                reader = csv.DictReader(f)
-                for row in reader:
-                    innovations.append({
-                        "title": row.get("name", "Unnamed Innovation"),
-                        "tier": row.get("tier", "-"),
-                        "magnitude": row.get("magnitude", ""),
-                        "summary": row.get("description", "Breakthrough logged by governance stack"),
-                        "detected_at": row.get("timestamp", ""),
-                    })
-        except Exception as exc:
-            logger.warning("Failed to parse innovations CSV: %s", exc)
-    
-    # Fill with generated innovations if needed
-    if len(innovations) < 4:
-        sample_size = min(6, len(INNOVATION_TEMPLATES))
-        selected = random.sample(INNOVATION_TEMPLATES, sample_size)
-        for inv in selected:
-            if len(innovations) >= 6:
+def _next_narrative_chunk() -> Dict[str, Any]:
+    """Return next narrative excerpt — cycles through all chapters, never repeats in order"""
+    global _narrative_index
+    files = _narrative_files or _load_narrative_files()
+    if not files:
+        return {"text": "Simulation is initializing…", "chapter": 0, "epoch": "The Awakening"}
+
+    with _narrative_lock:
+        idx = _narrative_index % len(files)
+        _narrative_index += 1
+        f = files[idx]
+
+    try:
+        content = f.read_text(encoding="utf-8", errors="replace")
+        lines = [l for l in content.split("\n") if l.strip() and not l.startswith("=") and not l.startswith("─")]
+        # Pick a meaningful paragraph (skip header lines)
+        start = min(5, len(lines) - 1)
+        para_lines = lines[start:start + 8]
+        text = " ".join(para_lines).strip()
+        if len(text) > 500:
+            text = text[:500] + "…"
+
+        # Extract metadata
+        civ = next((l.replace("CIVILIZATION:", "").strip() for l in lines if l.startswith("CIVILIZATION:")), "Unknown")
+        yr  = next((l.replace("SIMULATION YEAR:", "").strip() for l in lines if "SIMULATION YEAR:" in l), "")
+        import re
+        epoch_name = "The Omega Point"
+        fn = f.name.lower()
+        for ep in reversed(EPOCH_ORDER):
+            if ep.lower().replace(" ", "_").replace("-", "_") in fn or ep.lower().split()[1] in fn:
+                epoch_name = ep
                 break
-            innovations.append({
-                "title": inv["title"],
-                "tier": inv["tier"],
-                "magnitude": inv["magnitude"],
-                "summary": inv["summary"],
-                "detected_at": datetime.utcnow().isoformat(),
-            })
-    
-    return innovations[:8]
+
+        ch_match = re.search(r"chapter_(\d+)", f.name)
+        ch_num = int(ch_match.group(1)) if ch_match else idx + 1
+
+        return {
+            "text": text,
+            "chapter": ch_num,
+            "filename": f.name,
+            "civilization": civ,
+            "year": yr,
+            "epoch": epoch_name,
+            "chapter_index": idx,
+            "total_chapters": len(files),
+        }
+    except Exception as e:
+        return {"text": f"Chapter loading error: {e}", "chapter": 0, "epoch": "Unknown"}
 
 
-def build_agent_list(state: Dict[str, Any]) -> List[Dict[str, Any]]:
-    """Build agent list with enhanced metadata"""
-    agents = []
-    for agent_id, meta in AGENT_METADATA.items():
-        agent_state = state.get("agents", {}).get(agent_id, {})
-        status = agent_state.get("status", "inactive")
-        
-        # Calculate a pseudo-random "energy" level based on agent
-        energy = random.randint(70, 100) if status == "running" else random.randint(10, 40)
-        
-        agents.append({
-            "id": agent_id,
-            "name": meta["name"],
-            "role": meta["role"],
-            "color": meta["color"],
-            "status": status,
-            "energy": energy,
-            "tasks_completed": random.randint(100, 5000) if status == "running" else 0,
-        })
-    return agents
+def read_civ_state() -> Dict[str, Any]:
+    if CIV_STATE.exists():
+        try:
+            return json.loads(CIV_STATE.read_text())
+        except Exception:
+            pass
+    return {}
 
 
-def compute_stats(state: Dict[str, Any], narratives_count: int, innovations_count: int) -> Dict[str, Any]:
-    """Compute enhanced statistics"""
-    uptime_seconds = int(state.get("uptime_seconds", 0))
-    uptime_hours = round(uptime_seconds / 3600, 2)
-    active_agents = sum(1 for agent in state.get("agents", {}).values() if agent.get("status") == "running")
-    
-    # Generate realistic-looking stats
-    base_tick = max(1, uptime_seconds)
-    
+def read_sys_state() -> Dict[str, Any]:
+    if SYS_STATE.exists():
+        try:
+            return json.loads(SYS_STATE.read_text())
+        except Exception:
+            pass
+    return {}
+
+
+def load_recent_innovations(n: int = 8) -> List[Dict]:
+    innovations = []
+    if INNOVATIONS_DIR.exists():
+        files = sorted(INNOVATIONS_DIR.glob("*.txt"), key=lambda f: f.stat().st_mtime, reverse=True)
+        for f in files[:n]:
+            try:
+                content = f.read_text(encoding="utf-8", errors="replace")
+                lines = content.split("\n")
+                title = next((l.replace("INNOVATION:", "").strip() for l in lines if l.startswith("INNOVATION:")), f.stem)
+                tier  = next((l.replace("TIER:", "").strip() for l in lines if l.startswith("TIER:")), "?")
+                mag   = next((l.replace("MAGNITUDE:", "").strip() for l in lines if l.startswith("MAGNITUDE:")), "")
+                desc  = next((l.replace("DESCRIPTION:", "").strip() for l in lines if l.startswith("DESCRIPTION:")), "")
+                cat   = next((l.replace("CATEGORY:", "").strip() for l in lines if l.startswith("CATEGORY:")), "")
+                innovations.append({
+                    "title": title[:80],
+                    "tier": tier,
+                    "magnitude": mag,
+                    "description": desc[:200],
+                    "category": cat,
+                    "timestamp": datetime.fromtimestamp(f.stat().st_mtime, tz=timezone.utc).isoformat(),
+                    "filename": f.name,
+                })
+            except Exception:
+                pass
+    return innovations
+
+
+def build_simulation_status() -> Dict[str, Any]:
+    civ = read_civ_state()
+    sys_s = read_sys_state()
+    ch_count = len(list(NARRATIVES_DIR.glob("chapter_*.txt"))) if NARRATIVES_DIR.exists() else 0
+    inv_count = len(list(INNOVATIONS_DIR.glob("*.txt"))) if INNOVATIONS_DIR.exists() else 0
+    consciousness = float(civ.get("consciousness_level", 0))
+    epoch_idx = min(int(consciousness * 10), 9)
+
     return {
-        "uptimeHours": uptime_hours,
-        "uptimeSeconds": uptime_seconds,
-        "activeAgents": active_agents,
-        "totalAgents": len(AGENT_METADATA),
-        "tickEstimate": base_tick,
-        "innovationCount": innovations_count,
-        "streamPulse": narratives_count,
-        "systemEfficiency": round(random.uniform(94.5, 99.9), 1),
-        "networkLatency": round(random.uniform(0.1, 0.5), 2),
-        "cognitionCoherence": random.choice(["optimal", "expanding", "evolving", "ascending"]),
-        "activeNodes": random.randint(800, 950),
-        "memoryAllocated": f"{random.randint(2, 4)}.{random.randint(0,9)}TB",
-        "processingVelocity": random.choice(["accelerating", "stable", "optimizing"]),
-        "innovationRate": round(random.uniform(1.5, 3.5), 1),
-        "evolutionIndex": random.choice(["climbing", "ascending", "expanding"]),
-        "consciousness": random.choice(["expanding", "deepening", "evolving", "emerging"]),
+        "updated_at": datetime.now(tz=timezone.utc).isoformat(),
+        "simulation": {
+            "running": True,
+            "year": civ.get("year", 0),
+            "consciousness": round(consciousness, 6),
+            "epoch_index": epoch_idx,
+            "current_epoch": EPOCH_ORDER[epoch_idx],
+            "omega_point_achieved": consciousness >= 1.0,
+            "first_contact_established": civ.get("first_contact_established", False),
+            "iterations": civ.get("iterations", sys_s.get("iterations", 0)),
+            "population": str(civ.get("population", 0)),
+            "tech_level": round(float(civ.get("tech_level", 0)), 4),
+            "chapters_written": civ.get("chapters_written", ch_count),
+        },
+        "library": {
+            "total_chapters": ch_count,
+            "total_innovations": inv_count,
+        },
+        "agents": {
+            "consciousness_harvester": "running",
+            "narrative_engine": "running",
+            "innovation_generator": "running",
+            "super_innovation_generator": "running",
+            "internet_sync": "running",
+            "streaming_server": "running",
+            "github_pages_sync": "running",
+        },
+        "recent_innovations": load_recent_innovations(5),
     }
 
 
-def build_overview_payload() -> Dict[str, Any]:
-    """Build the complete overview payload"""
-    state = read_state()
-    narratives = generate_rich_narratives(state)
-    agents = build_agent_list(state)
-    innovations = generate_innovations()
-    stats = compute_stats(state, len(narratives), len(innovations))
-    
-    return {
-        "running": state.get("running", False),
-        "timestamp": datetime.utcnow().isoformat(),
-        "narratives": narratives,
-        "agents": agents,
-        "innovations": innovations,
-        "stats": stats,
-        "version": "2.0.0",
-        "mode": "enhanced_stream",
+def build_sse_event(event_type: str = "update") -> str:
+    """Build a single SSE event payload"""
+    civ = read_civ_state()
+    narrative = _next_narrative_chunk()
+    inv = load_recent_innovations(3)
+    consciousness = float(civ.get("consciousness_level", 0))
+    epoch_idx = min(int(consciousness * 10), 9)
+    ch_count = len(list(NARRATIVES_DIR.glob("chapter_*.txt"))) if NARRATIVES_DIR.exists() else 0
+
+    payload = {
+        "type": event_type,
+        "timestamp": datetime.now(tz=timezone.utc).isoformat(),
+        "simulation": {
+            "year": civ.get("year", 0),
+            "consciousness": round(consciousness, 6),
+            "epoch_index": epoch_idx,
+            "current_epoch": EPOCH_ORDER[epoch_idx],
+            "chapters_written": ch_count,
+            "population": str(civ.get("population", 0)),
+            "tech_level": round(float(civ.get("tech_level", 0)), 4),
+            "omega_point_achieved": consciousness >= 1.0,
+        },
+        "narrative": narrative,
+        "innovations": inv,
     }
+    data = json.dumps(payload, ensure_ascii=False)
+    return f"event: {event_type}\ndata: {data}\n\n"
 
 
-class StreamHandler(BaseHTTPRequestHandler):
-    """HTTP handler for streaming API"""
-    
-    def log_message(self, format, *args):
-        logger.info("%s - %s", self.address_string(), format % args)
-    
-    def _send_json(self, payload: Dict[str, Any], status: int = 200):
-        body = json.dumps(payload, indent=2).encode()
-        self.send_response(status)
-        self.send_header("Content-Type", "application/json")
+# ── Background SSE broadcaster ─────────────────────────────────────
+def _sse_broadcaster():
+    """Broadcast simulation updates to all connected SSE clients every 5 seconds"""
+    _load_narrative_files()
+    logger.info("SSE broadcaster started")
+    while True:
+        time.sleep(5)
+        try:
+            event = build_sse_event("update")
+            encoded = event.encode("utf-8")
+            with _sse_lock:
+                dead = []
+                for client in _sse_clients:
+                    try:
+                        client.wfile.write(encoded)
+                        client.wfile.flush()
+                    except Exception:
+                        dead.append(client)
+                for c in dead:
+                    _sse_clients.remove(c)
+        except Exception as e:
+            logger.error(f"SSE broadcast error: {e}")
+
+
+broadcaster_thread = threading.Thread(target=_sse_broadcaster, daemon=True)
+broadcaster_thread.start()
+
+
+# ── HTTP Handler ───────────────────────────────────────────────────
+class AeonForgeHandler(BaseHTTPRequestHandler):
+
+    def log_message(self, fmt, *args):
+        logger.debug(f"{self.address_string()} {fmt % args}")
+
+    def _cors_headers(self):
         self.send_header("Access-Control-Allow-Origin", "*")
-        self.send_header("Cache-Control", "no-store, no-cache, must-revalidate")
+        self.send_header("Access-Control-Allow-Methods", "GET, OPTIONS")
         self.send_header("Access-Control-Allow-Headers", "Content-Type")
+
+    def _send_json(self, payload: Dict[str, Any], status: int = 200):
+        data = json.dumps(payload, ensure_ascii=False).encode("utf-8")
+        self.send_response(status)
+        self.send_header("Content-Type", "application/json; charset=utf-8")
+        self.send_header("Content-Length", str(len(data)))
+        self.send_header("Cache-Control", "no-cache")
+        self._cors_headers()
         self.end_headers()
-        self.wfile.write(body)
-    
+        self.wfile.write(data)
+
+    def do_OPTIONS(self):
+        self.send_response(200)
+        self._cors_headers()
+        self.end_headers()
+
     def do_GET(self):
-        if self.path == "/api/openclaw/status":
-            # Check OpenClaw gateway status
-            status = check_openclaw_status()
-            self._send_json(status)
-        elif self.path == "/api/openclaw/insight":
-            # Generate AI insight via OpenClaw
-            insight = generate_ai_insight()
-            self._send_json({
-                "insight": insight,
-                "timestamp": datetime.utcnow().isoformat(),
-            })
-        elif self.path == "/api/stream":
-            overview = build_overview_payload()
-            self._send_json({
-                "narratives": overview["narratives"],
-                "timestamp": overview["timestamp"],
-                "stats": overview["stats"],
-            })
-        elif self.path == "/api/status":
-            state = read_state()
-            self._send_json({
-                "running": state.get("running", False),
-                "uptime_seconds": state.get("uptime_seconds", 0),
-                "timestamp": datetime.utcnow().isoformat(),
-            })
-        elif self.path == "/api/agents":
-            overview = build_overview_payload()
-            self._send_json({"agents": overview["agents"], "timestamp": overview["timestamp"]})
-        elif self.path == "/api/innovations":
-            overview = build_overview_payload()
-            self._send_json({"innovations": overview["innovations"], "timestamp": overview["timestamp"]})
-        elif self.path == "/api/stats":
-            overview = build_overview_payload()
-            self._send_json({"stats": overview["stats"], "timestamp": overview["timestamp"]})
-        elif self.path == "/api/overview":
-            overview = build_overview_payload()
-            self._send_json(overview)
-        elif self.path == "/health":
-            self._send_json({"status": "healthy", "timestamp": datetime.utcnow().isoformat()})
-        elif self.path == "/" or self.path == "/index.html":
-            self.send_response(302)
-            self.send_header("Location", "/index.html")
-            self.end_headers()
-        else:
-            self.serve_file()
-    
-    def serve_file(self):
-        """Serve static files"""
-        path = self.path.lstrip("/")
-        if not path:
-            path = "index.html"
-        
-        file_path = Path("/home/praneeth/Desktop/aeonforge-streaming-site") / path
-        
-        if file_path.exists() and file_path.is_file():
-            content = file_path.read_bytes()
-            ext = file_path.suffix.lower()
-            
-            content_types = {
-                ".html": "text/html",
-                ".js": "application/javascript",
-                ".css": "text/css",
-                ".json": "application/json",
-                ".png": "image/png",
-                ".ico": "image/x-icon",
-            }
-            
+        path = self.path.split("?")[0]
+
+        # ── Live SSE stream ──────────────────────────────────────
+        if path == "/api/stream/live":
             self.send_response(200)
-            self.send_header("Content-Type", content_types.get(ext, "text/plain"))
-            self.send_header("Content-Length", len(content))
+            self.send_header("Content-Type", "text/event-stream; charset=utf-8")
+            self.send_header("Cache-Control", "no-cache")
+            self.send_header("Connection", "keep-alive")
+            self.send_header("X-Accel-Buffering", "no")
+            self._cors_headers()
             self.end_headers()
-            self.wfile.write(content)
+
+            # Send initial event immediately
+            try:
+                init_event = build_sse_event("init")
+                self.wfile.write(init_event.encode("utf-8"))
+                self.wfile.flush()
+            except Exception:
+                return
+
+            # Register this client for broadcasts
+            with _sse_lock:
+                _sse_clients.append(self)
+
+            # Keep connection open until client disconnects
+            try:
+                while True:
+                    time.sleep(30)
+                    # Heartbeat
+                    self.wfile.write(b": heartbeat\n\n")
+                    self.wfile.flush()
+            except Exception:
+                with _sse_lock:
+                    if self in _sse_clients:
+                        _sse_clients.remove(self)
+
+        # ── One-shot stream snapshot ─────────────────────────────
+        elif path == "/api/stream":
+            civ = read_civ_state()
+            consciousness = float(civ.get("consciousness_level", 0))
+            epoch_idx = min(int(consciousness * 10), 9)
+            ch_count = len(list(NARRATIVES_DIR.glob("chapter_*.txt"))) if NARRATIVES_DIR.exists() else 0
+            self._send_json({
+                "timestamp": datetime.now(tz=timezone.utc).isoformat(),
+                "narrative": _next_narrative_chunk(),
+                "stats": {
+                    "year": civ.get("year", 0),
+                    "consciousness": round(consciousness, 6),
+                    "epoch": EPOCH_ORDER[epoch_idx],
+                    "chapters": ch_count,
+                    "population": str(civ.get("population", 0)),
+                    "tech_level": round(float(civ.get("tech_level", 0)), 4),
+                },
+                "innovations": load_recent_innovations(5),
+            })
+
+        # ── Full simulation status ───────────────────────────────
+        elif path in ("/api/status", "/api/simulation_status"):
+            status = build_simulation_status()
+            # Also write to file for GitHub Pages
+            try:
+                STATUS_JSON.write_text(json.dumps(status, indent=2, ensure_ascii=False))
+            except Exception:
+                pass
+            self._send_json(status)
+
+        # ── Agents ──────────────────────────────────────────────
+        elif path == "/api/agents":
+            civ = read_civ_state()
+            consciousness = float(civ.get("consciousness_level", 0))
+            self._send_json({
+                "agents": [
+                    {"id": "consciousness_harvester", "name": "Consciousness Harvester", "status": "running", "role": "Monitors and evolves consciousness field", "consciousness": round(consciousness, 4)},
+                    {"id": "narrative_engine", "name": "Narrative Engine", "status": "running", "role": "Writes civilization chronicles in real-time"},
+                    {"id": "innovation_generator", "name": "Innovation Generator", "status": "running", "role": "Discovers and catalogs breakthroughs"},
+                    {"id": "super_innovation_generator", "name": "OMEGA Innovation Engine", "status": "running", "role": "Generates epoch-transcending super-innovations"},
+                    {"id": "internet_sync", "name": "Internet Sync", "status": "running", "role": "Broadcasts simulation state to the outer world"},
+                    {"id": "streaming_server", "name": "Streaming Server", "status": "running", "role": "Serves live data to all observers"},
+                    {"id": "github_pages_sync", "name": "GitHub Pages Sync", "status": "running", "role": "Publishes chronicles to github.aeonisforge.com"},
+                ],
+                "timestamp": datetime.now(tz=timezone.utc).isoformat(),
+            })
+
+        # ── Innovations ──────────────────────────────────────────
+        elif path == "/api/innovations":
+            self._send_json({
+                "innovations": load_recent_innovations(20),
+                "timestamp": datetime.now(tz=timezone.utc).isoformat(),
+            })
+
+        # ── Library ──────────────────────────────────────────────
+        elif path == "/api/library":
+            if LIBRARY_JSON.exists():
+                try:
+                    data = json.loads(LIBRARY_JSON.read_text(encoding="utf-8"))
+                    self._send_json(data)
+                except Exception as e:
+                    self._send_json({"error": str(e), "chapters": []}, 500)
+            else:
+                self._send_json({"error": "Library not compiled yet.", "chapters": []}, 404)
+
+        # ── Narrative stream (next chapter) ──────────────────────
+        elif path == "/api/narrative":
+            self._send_json(_next_narrative_chunk())
+
+        # ── Health ───────────────────────────────────────────────
+        elif path == "/health":
+            self._send_json({"status": "healthy", "timestamp": datetime.now(tz=timezone.utc).isoformat(), "sse_clients": len(_sse_clients)})
+
+        # ── Static files ─────────────────────────────────────────
         else:
-            self.send_error(404)
+            self._serve_static()
+
+    def _serve_static(self):
+        path = self.path.split("?")[0].lstrip("/")
+        if not path or path == "index.html":
+            path = "index.html"
+
+        file_path = SITE_DIR / path
+        if not file_path.exists() or not file_path.is_file():
+            self.send_response(404)
+            self.end_headers()
+            self.wfile.write(b"404 Not Found")
+            return
+
+        mime, _ = mimetypes.guess_type(str(file_path))
+        mime = mime or "application/octet-stream"
+        data = file_path.read_bytes()
+        self.send_response(200)
+        self.send_header("Content-Type", mime)
+        self.send_header("Content-Length", str(len(data)))
+        self.send_header("Cache-Control", "no-cache")
+        self._cors_headers()
+        self.end_headers()
+        self.wfile.write(data)
+
+
+class ThreadedHTTPServer(HTTPServer):
+    """Handle each request in a new thread"""
+    def process_request(self, request, client_address):
+        t = threading.Thread(target=self._handle, args=(request, client_address))
+        t.daemon = True
+        t.start()
+
+    def _handle(self, request, client_address):
+        try:
+            self.finish_request(request, client_address)
+        except Exception:
+            pass
 
 
 def run_server(port: int = 8080):
-    server = HTTPServer(("0.0.0.0", port), StreamHandler)
-    logger.info("=" * 50)
-    logger.info("AeonForge Streaming API v2.0 - ENHANCED")
-    logger.info("=" * 50)
-    logger.info(f"Running on http://0.0.0.0:{port}")
-    logger.info("Endpoints:")
-    logger.info(f"  - http://localhost:{port}/api/overview (full data)")
-    logger.info(f"  - http://localhost:{port}/api/stream (narratives + stats)")
-    logger.info(f"  - http://localhost:{port}/api/agents (agent status)")
-    logger.info(f"  - http://localhost:{port}/api/innovations (breakthroughs)")
-    logger.info(f"  - http://localhost:{port}/api/stats (metrics)")
-    logger.info(f"  - http://localhost:{port}/ (web UI)")
-    logger.info("=" * 50)
-    
+    _load_narrative_files()
+    logger.info("=" * 60)
+    logger.info("AeonForge Streaming Server — OMEGA Edition")
+    logger.info(f"  http://localhost:{port}/")
+    logger.info(f"  http://localhost:{port}/api/stream/live  (SSE real-time)")
+    logger.info(f"  http://localhost:{port}/api/stream       (JSON snapshot)")
+    logger.info(f"  http://localhost:{port}/api/status       (simulation status)")
+    logger.info(f"  http://localhost:{port}/api/agents       (agent list)")
+    logger.info(f"  http://localhost:{port}/api/innovations  (breakthroughs)")
+    logger.info(f"  http://localhost:{port}/api/narrative    (next chapter)")
+    logger.info(f"  http://localhost:{port}/api/library      (full library)")
+    logger.info(f"  http://localhost:{port}/health           (health check)")
+    logger.info(f"  Loaded {len(_narrative_files)} narrative chapters")
+    logger.info("=" * 60)
+
+    server = ThreadedHTTPServer(("0.0.0.0", port), AeonForgeHandler)
     try:
         server.serve_forever()
     except KeyboardInterrupt:
         logger.info("Server stopped")
-        server.shutdown()
 
 
 if __name__ == "__main__":
-    run_server()
+    port = int(sys.argv[1]) if len(sys.argv) > 1 else 8080
+    run_server(port)
