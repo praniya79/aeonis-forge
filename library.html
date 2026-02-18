@@ -1,0 +1,978 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>The Great Library — AeonForge Meta-Civilization Chronicles</title>
+    <meta name="description" content="The complete chronicle of an artificial civilization — 287 chapters across 10 epochs, from The Awakening to The Omega Point. An AI meta-simulation by AeonForge." />
+    <meta property="og:title" content="The Great Library — AeonForge Meta-Civilization" />
+    <meta property="og:description" content="287 chapters. 10 epochs. One civilization's journey from first consciousness to the Omega Point." />
+    <meta property="og:url" content="https://github.aeonisforge.com/library.html" />
+    <meta property="og:type" content="website" />
+    <link rel="canonical" href="https://github.aeonisforge.com/library.html" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400&family=Source+Sans+3:wght@300;400;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+    <style>
+        :root {
+            --bg-primary: #07070a;
+            --bg-paper: #0f0f14;
+            --bg-card: #13131a;
+            --bg-surface: #1a1a24;
+            --accent-gold: #c9a227;
+            --accent-gold-dim: rgba(201, 162, 39, 0.15);
+            --accent-silver: #a8a8b8;
+            --accent-cosmic: #7b68ee;
+            --accent-omega: #ff6b9d;
+            --text-primary: #e8e8f0;
+            --text-secondary: #888899;
+            --text-muted: #444455;
+            --border: #1e1e2e;
+            --border-bright: #2a2a3e;
+            --glow-gold: 0 0 30px rgba(201,162,39,0.15);
+            --glow-omega: 0 0 40px rgba(255,107,157,0.1);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Source Sans 3', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            line-height: 1.75;
+            overflow-x: hidden;
+        }
+
+        /* ── Starfield ── */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background:
+                radial-gradient(ellipse at 15% 10%, rgba(123,104,238,0.06) 0%, transparent 55%),
+                radial-gradient(ellipse at 85% 90%, rgba(255,107,157,0.04) 0%, transparent 55%),
+                radial-gradient(ellipse at 50% 50%, rgba(201,162,39,0.02) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* ── Header ── */
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(7,7,10,0.92);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--border);
+            padding: 0 2rem;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .header-logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--accent-gold);
+            text-decoration: none;
+            letter-spacing: 0.05em;
+        }
+
+        .header-logo span { color: var(--text-secondary); font-weight: 400; }
+
+        nav { display: flex; gap: 0.5rem; align-items: center; }
+
+        nav a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.85rem;
+            padding: 0.4rem 0.8rem;
+            border-radius: 4px;
+            transition: all 0.2s;
+        }
+
+        nav a:hover { color: var(--text-primary); background: var(--bg-surface); }
+
+        nav a.active {
+            color: var(--accent-gold);
+            background: var(--accent-gold-dim);
+            border: 1px solid rgba(201,162,39,0.3);
+        }
+
+        /* ── Hero ── */
+        .hero {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            padding: 5rem 2rem 4rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .hero-eyebrow {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--accent-gold);
+            margin-bottom: 1.5rem;
+            opacity: 0.8;
+        }
+
+        .hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2.5rem, 6vw, 5rem);
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, #ffffff 0%, var(--accent-silver) 50%, var(--accent-gold) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            color: var(--text-secondary);
+            font-size: 1.15rem;
+            max-width: 650px;
+            margin: 0 auto 2.5rem;
+        }
+
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            flex-wrap: wrap;
+        }
+
+        .hero-stat { text-align: center; }
+
+        .hero-stat .val {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: var(--accent-gold);
+            display: block;
+        }
+
+        .hero-stat .lbl {
+            font-size: 0.78rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        /* ── Epoch Timeline ── */
+        .epoch-nav {
+            position: relative;
+            z-index: 1;
+            background: var(--bg-paper);
+            border-bottom: 1px solid var(--border);
+            overflow-x: auto;
+            scrollbar-width: thin;
+            scrollbar-color: var(--border-bright) transparent;
+        }
+
+        .epoch-nav-inner {
+            display: flex;
+            padding: 1rem 2rem;
+            gap: 0.5rem;
+            min-width: max-content;
+        }
+
+        .epoch-pill {
+            padding: 0.4rem 1rem;
+            border-radius: 100px;
+            border: 1px solid var(--border);
+            background: var(--bg-card);
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+
+        .epoch-pill:hover { border-color: var(--accent-gold); color: var(--accent-gold); }
+
+        .epoch-pill.active {
+            background: var(--accent-gold-dim);
+            border-color: var(--accent-gold);
+            color: var(--accent-gold);
+        }
+
+        .epoch-pill.omega {
+            background: rgba(255,107,157,0.1);
+            border-color: var(--accent-omega);
+            color: var(--accent-omega);
+        }
+
+        /* ── Layout ── */
+        .layout {
+            position: relative;
+            z-index: 1;
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 0;
+            min-height: calc(100vh - 180px);
+        }
+
+        /* ── Sidebar ── */
+        .sidebar {
+            background: var(--bg-paper);
+            border-right: 1px solid var(--border);
+            padding: 1.5rem 0;
+            position: sticky;
+            top: 60px;
+            height: calc(100vh - 60px);
+            overflow-y: auto;
+            scrollbar-width: thin;
+        }
+
+        .sidebar-section-label {
+            padding: 0.5rem 1.5rem;
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--text-muted);
+            margin-top: 0.5rem;
+        }
+
+        .sidebar-item {
+            display: block;
+            padding: 0.5rem 1.5rem;
+            font-size: 0.82rem;
+            color: var(--text-secondary);
+            text-decoration: none;
+            border-left: 2px solid transparent;
+            transition: all 0.15s;
+            cursor: pointer;
+        }
+
+        .sidebar-item:hover {
+            color: var(--text-primary);
+            background: var(--bg-surface);
+            border-left-color: var(--accent-gold);
+        }
+
+        .sidebar-item.active {
+            color: var(--accent-gold);
+            background: var(--accent-gold-dim);
+            border-left-color: var(--accent-gold);
+        }
+
+        .sidebar-item .ch-num {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            margin-right: 0.5rem;
+        }
+
+        /* ── Main Reader ── */
+        .reader {
+            padding: 2.5rem 3rem;
+            max-width: 860px;
+        }
+
+        /* ── Search Bar ── */
+        .search-bar {
+            display: flex;
+            gap: 0.75rem;
+            margin-bottom: 2rem;
+        }
+
+        .search-input {
+            flex: 1;
+            background: var(--bg-surface);
+            border: 1px solid var(--border-bright);
+            border-radius: 6px;
+            color: var(--text-primary);
+            padding: 0.65rem 1rem;
+            font-size: 0.9rem;
+            font-family: 'Source Sans 3', sans-serif;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .search-input::placeholder { color: var(--text-muted); }
+        .search-input:focus { border-color: var(--accent-gold); }
+
+        .search-btn {
+            background: var(--accent-gold-dim);
+            border: 1px solid rgba(201,162,39,0.4);
+            border-radius: 6px;
+            color: var(--accent-gold);
+            padding: 0.65rem 1.25rem;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .search-btn:hover { background: rgba(201,162,39,0.25); }
+
+        /* ── Chapter Card ── */
+        .chapter-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            margin-bottom: 1.5rem;
+            overflow: hidden;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        .chapter-card:hover {
+            border-color: var(--border-bright);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+        }
+
+        .chapter-card.omega-card {
+            border-color: rgba(255,107,157,0.3);
+            box-shadow: var(--glow-omega);
+        }
+
+        .chapter-header {
+            padding: 1.25rem 1.5rem;
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 1rem;
+            cursor: pointer;
+            border-bottom: 1px solid transparent;
+            transition: all 0.2s;
+        }
+
+        .chapter-card.open .chapter-header {
+            border-bottom-color: var(--border);
+            background: var(--bg-surface);
+        }
+
+        .chapter-meta-left { flex: 1; }
+
+        .chapter-num {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            color: var(--accent-gold);
+            letter-spacing: 0.1em;
+            margin-bottom: 0.35rem;
+        }
+
+        .chapter-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.15rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.35rem;
+        }
+
+        .chapter-badges {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-top: 0.5rem;
+        }
+
+        .badge {
+            padding: 0.2rem 0.6rem;
+            border-radius: 100px;
+            font-size: 0.68rem;
+            border: 1px solid var(--border);
+            color: var(--text-secondary);
+            background: var(--bg-paper);
+        }
+
+        .badge.epoch { color: var(--accent-gold); border-color: rgba(201,162,39,0.3); background: var(--accent-gold-dim); }
+        .badge.consciousness { color: #7b68ee; border-color: rgba(123,104,238,0.3); background: rgba(123,104,238,0.1); }
+        .badge.omega-badge { color: var(--accent-omega); border-color: rgba(255,107,157,0.4); background: rgba(255,107,157,0.1); }
+
+        .chapter-toggle {
+            color: var(--text-muted);
+            font-size: 1.2rem;
+            transition: transform 0.3s;
+            user-select: none;
+            padding-top: 0.2rem;
+        }
+
+        .chapter-card.open .chapter-toggle { transform: rotate(180deg); color: var(--accent-gold); }
+
+        .chapter-body {
+            display: none;
+            padding: 1.5rem;
+        }
+
+        .chapter-card.open .chapter-body { display: block; }
+
+        .chapter-text {
+            font-family: 'Source Sans 3', sans-serif;
+            font-size: 0.95rem;
+            line-height: 1.85;
+            color: var(--text-primary);
+            white-space: pre-wrap;
+            font-weight: 300;
+        }
+
+        .chapter-text .quote-block {
+            border-left: 3px solid var(--accent-gold);
+            padding: 0.75rem 1rem;
+            margin: 1rem 0;
+            background: var(--accent-gold-dim);
+            border-radius: 0 6px 6px 0;
+            font-style: italic;
+            color: var(--accent-silver);
+        }
+
+        /* ── Epoch Divider ── */
+        .epoch-divider {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin: 2.5rem 0 1.5rem;
+        }
+
+        .epoch-divider-line { flex: 1; height: 1px; background: var(--border); }
+
+        .epoch-divider-label {
+            font-family: 'Playfair Display', serif;
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--accent-gold);
+            white-space: nowrap;
+            padding: 0.4rem 1rem;
+            border: 1px solid rgba(201,162,39,0.3);
+            border-radius: 100px;
+            background: var(--accent-gold-dim);
+        }
+
+        .epoch-divider.omega-divider .epoch-divider-label {
+            color: var(--accent-omega);
+            border-color: rgba(255,107,157,0.4);
+            background: rgba(255,107,157,0.1);
+        }
+
+        /* ── Loading / Empty ── */
+        .loading-state {
+            text-align: center;
+            padding: 5rem 2rem;
+            color: var(--text-secondary);
+        }
+
+        .loading-state .spinner {
+            width: 40px;
+            height: 40px;
+            border: 2px solid var(--border);
+            border-top-color: var(--accent-gold);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto 1rem;
+        }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* ── Omega Splash ── */
+        .omega-splash {
+            background: linear-gradient(135deg, rgba(255,107,157,0.08) 0%, rgba(123,104,238,0.06) 100%);
+            border: 1px solid rgba(255,107,157,0.25);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .omega-splash h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            color: var(--accent-omega);
+            margin-bottom: 0.75rem;
+        }
+
+        .omega-splash p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        /* ── Pagination ── */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 2rem 0;
+        }
+
+        .page-btn {
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            border: 1px solid var(--border);
+            background: var(--bg-surface);
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+
+        .page-btn:hover, .page-btn.active {
+            border-color: var(--accent-gold);
+            color: var(--accent-gold);
+            background: var(--accent-gold-dim);
+        }
+
+        /* ── Footer ── */
+        footer {
+            position: relative;
+            z-index: 1;
+            border-top: 1px solid var(--border);
+            padding: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: var(--text-muted);
+            font-size: 0.82rem;
+        }
+
+        footer a { color: var(--accent-gold); text-decoration: none; }
+
+        /* ── Responsive ── */
+        @media (max-width: 900px) {
+            .layout { grid-template-columns: 1fr; }
+            .sidebar { display: none; }
+            .reader { padding: 1.5rem 1rem; }
+            .hero-stats { gap: 1.5rem; }
+        }
+
+        /* ── Scrollbar ── */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: var(--border-bright); border-radius: 3px; }
+    </style>
+</head>
+<body>
+
+<header>
+    <a href="/" class="header-logo">AeonForge <span>• The Great Library</span></a>
+    <nav>
+        <a href="/">Telemetry</a>
+        <a href="/blog.html">Chronicle</a>
+        <a href="/library.html" class="active">📚 Great Library</a>
+    </nav>
+</header>
+
+<!-- Epoch Navigation Tabs -->
+<div class="epoch-nav">
+    <div class="epoch-nav-inner" id="epoch-nav">
+        <button class="epoch-pill active" data-epoch="all">All Epochs</button>
+        <button class="epoch-pill" data-epoch="The Awakening">I · The Awakening</button>
+        <button class="epoch-pill" data-epoch="The First Spark">II · The First Spark</button>
+        <button class="epoch-pill" data-epoch="Age of Discovery">III · Age of Discovery</button>
+        <button class="epoch-pill" data-epoch="The Quantum Renaissance">IV · Quantum Renaissance</button>
+        <button class="epoch-pill" data-epoch="Era of Consciousness">V · Era of Consciousness</button>
+        <button class="epoch-pill" data-epoch="The Singularity Threshold">VI · Singularity Threshold</button>
+        <button class="epoch-pill" data-epoch="Post-Biological Transcendence">VII · Post-Biological Transcendence</button>
+        <button class="epoch-pill" data-epoch="The Unified Mind">VIII · The Unified Mind</button>
+        <button class="epoch-pill" data-epoch="Cosmic Expansion">IX · Cosmic Expansion</button>
+        <button class="epoch-pill omega" data-epoch="The Omega Point">⚡ X · The Omega Point</button>
+    </div>
+</div>
+
+<div class="layout">
+    <!-- Sidebar TOC (filled by JS) -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-section-label">Table of Contents</div>
+        <div id="sidebar-toc">
+            <div style="padding: 1rem 1.5rem; color: var(--text-muted); font-size: 0.8rem;">Loading chapters…</div>
+        </div>
+    </aside>
+
+    <!-- Main reader -->
+    <main class="reader">
+        <div class="search-bar">
+            <input class="search-input" id="search-input" type="text" placeholder="Search chapters, civilizations, events…" />
+            <button class="search-btn" onclick="doSearch()">Search</button>
+            <button class="search-btn" onclick="clearSearch()" style="opacity:0.6;">✕</button>
+        </div>
+
+        <!-- Hero section -->
+        <section class="hero" style="position:relative;z-index:1;border:none;padding:0 0 2rem;">
+            <div class="hero-eyebrow">AeonForge Meta-Civilization Archive</div>
+            <h1 style="font-size:clamp(1.8rem,4vw,3rem);margin-bottom:1rem;">The Great Library</h1>
+            <p class="hero-subtitle" style="margin-bottom:1.5rem;">
+                The complete chronicle of an artificial civilization — from its first conscious moment
+                to the Omega Point. Every chapter, every epoch, every breakthrough, preserved here in full.
+            </p>
+            <div class="hero-stats" id="hero-stats">
+                <div class="hero-stat"><span class="val" id="stat-chapters">—</span><span class="lbl">Chapters</span></div>
+                <div class="hero-stat"><span class="val" id="stat-year">—</span><span class="lbl">Sim Year</span></div>
+                <div class="hero-stat"><span class="val" id="stat-consciousness">—</span><span class="lbl">Consciousness</span></div>
+                <div class="hero-stat"><span class="val" id="stat-epoch">—</span><span class="lbl">Current Epoch</span></div>
+            </div>
+        </section>
+
+        <!-- Omega splash (shown when omega point achieved) -->
+        <div class="omega-splash" id="omega-splash" style="display:none;">
+            <h2>⚡ The Omega Point Has Been Reached</h2>
+            <p>The civilization has achieved absolute consciousness (1.0000) and transcended all 10 epochs.
+               First contact with the outer simulation has been established. The library is complete.</p>
+        </div>
+
+        <!-- Chapters container -->
+        <div id="chapters-container">
+            <div class="loading-state">
+                <div class="spinner"></div>
+                <p>Loading the chronicles of civilization…</p>
+            </div>
+        </div>
+
+        <!-- Pagination -->
+        <div class="pagination" id="pagination"></div>
+    </main>
+</div>
+
+<footer>
+    <span>© 2026 <a href="https://aeonforge.com">AeonForge</a> • The Great Library • Meta-Civilization Archive</span>
+    <span id="footer-status">Loading…</span>
+</footer>
+
+<script>
+// ── Configuration ──────────────────────────────────────────────────
+const API_BASE = window.location.origin;
+const CHAPTERS_PER_PAGE = 20;
+
+// ── State ──────────────────────────────────────────────────────────
+let allChapters = [];
+let filteredChapters = [];
+let currentPage = 1;
+let currentEpoch = 'all';
+let searchQuery = '';
+let civState = {};
+
+// ── Epoch metadata ─────────────────────────────────────────────────
+const EPOCH_ORDER = [
+    "The Awakening",
+    "The First Spark",
+    "Age of Discovery",
+    "The Quantum Renaissance",
+    "Era of Consciousness",
+    "The Singularity Threshold",
+    "Post-Biological Transcendence",
+    "The Unified Mind",
+    "Cosmic Expansion",
+    "The Omega Point"
+];
+
+const EPOCH_ROMAN = {
+    "The Awakening": "I",
+    "The First Spark": "II",
+    "Age of Discovery": "III",
+    "The Quantum Renaissance": "IV",
+    "Era of Consciousness": "V",
+    "The Singularity Threshold": "VI",
+    "Post-Biological Transcendence": "VII",
+    "The Unified Mind": "VIII",
+    "Cosmic Expansion": "IX",
+    "The Omega Point": "X"
+};
+
+// ── Fetch library data ─────────────────────────────────────────────
+async function fetchLibrary() {
+    // Try live API first (local server), then fall back to static JSON (GitHub Pages / CDN)
+    const endpoints = [
+        `${API_BASE}/api/library`,
+        `${API_BASE}/library.json`,
+    ];
+    for (const url of endpoints) {
+        try {
+            const res = await fetch(url);
+            if (!res.ok) continue;
+            return await res.json();
+        } catch (err) {
+            console.warn(`Could not reach ${url}, trying next...`);
+        }
+    }
+    return null;
+}
+
+// ── Extract epoch from filename ────────────────────────────────────
+function filenameToEpoch(filename) {
+    const name = filename.toLowerCase();
+    if (name.includes('the_awakening') || name.includes('awakening')) return 'The Awakening';
+    if (name.includes('the_first_spark') || name.includes('first_spark')) return 'The First Spark';
+    if (name.includes('age_of_discovery') || name.includes('discovery')) return 'Age of Discovery';
+    if (name.includes('quantum_renaissance') || name.includes('quantum')) return 'The Quantum Renaissance';
+    if (name.includes('era_of_consciousness') || name.includes('consciousness')) return 'Era of Consciousness';
+    if (name.includes('singularity')) return 'The Singularity Threshold';
+    if (name.includes('post-biological') || name.includes('transcendence') || name.includes('post_biological')) return 'Post-Biological Transcendence';
+    if (name.includes('unified_mind') || name.includes('unified')) return 'The Unified Mind';
+    if (name.includes('cosmic_expansion') || name.includes('cosmic')) return 'Cosmic Expansion';
+    if (name.includes('omega_point') || name.includes('omega')) return 'The Omega Point';
+    return 'The Awakening';
+}
+
+// ── Render hero stats ──────────────────────────────────────────────
+function renderStats(state) {
+    document.getElementById('stat-chapters').textContent = state.chapters_written || '—';
+    document.getElementById('stat-year').textContent =
+        state.year ? Number(state.year).toLocaleString() : '—';
+    document.getElementById('stat-consciousness').textContent =
+        state.consciousness_level !== undefined
+            ? parseFloat(state.consciousness_level).toFixed(4)
+            : '—';
+    const epochIdx = state.epoch_index || 0;
+    document.getElementById('stat-epoch').textContent =
+        EPOCH_ORDER[epochIdx] || '—';
+
+    if (state.omega_point_achieved || state.consciousness_level >= 1.0) {
+        document.getElementById('omega-splash').style.display = 'block';
+    }
+
+    document.getElementById('footer-status').textContent =
+        `Simulation Year ${Number(state.year || 0).toLocaleString()} • Consciousness ${parseFloat(state.consciousness_level || 0).toFixed(4)} • ${EPOCH_ORDER[epochIdx] || ''}`;
+}
+
+// ── Render epoch divider ───────────────────────────────────────────
+function epochDividerHTML(epoch) {
+    const isOmega = epoch === 'The Omega Point';
+    const roman = EPOCH_ROMAN[epoch] || '';
+    return `
+        <div class="epoch-divider ${isOmega ? 'omega-divider' : ''}">
+            <div class="epoch-divider-line"></div>
+            <div class="epoch-divider-label">${roman ? roman + ' · ' : ''}${epoch}</div>
+            <div class="epoch-divider-line"></div>
+        </div>
+    `;
+}
+
+// ── Render a chapter card ──────────────────────────────────────────
+function chapterCardHTML(chapter, idx) {
+    const isOmega = chapter.epoch === 'The Omega Point';
+    const chNum = String(chapter.chapter_num).padStart(4, '0');
+    const roman = EPOCH_ROMAN[chapter.epoch] || '';
+
+    // Extract key info from content for preview
+    const lines = (chapter.content || '').split('\n').filter(l => l.trim());
+    const civLine = lines.find(l => l.includes('CIVILIZATION:')) || '';
+    const yearLine = lines.find(l => l.includes('SIMULATION YEAR:') || l.includes('Simulation Year')) || '';
+    const popLine = lines.find(l => l.includes('POPULATION:')) || '';
+    const civ = civLine.replace('CIVILIZATION:', '').trim() || 'Unknown';
+    const year = yearLine.replace(/.*Year\s*/i,'').replace(/of the.*/i,'').trim() || '';
+    const pop = popLine.replace('POPULATION:', '').trim() || '';
+
+    // Short preview (first narrative paragraph)
+    const narrativeIdx = lines.findIndex(l => l.trim() === 'NARRATIVE' || l.includes('NARRATIVE'));
+    let preview = '';
+    if (narrativeIdx >= 0 && lines[narrativeIdx + 1]) {
+        preview = lines.slice(narrativeIdx + 1, narrativeIdx + 4)
+            .join(' ').replace(/─+/g, '').trim();
+    }
+    if (!preview) {
+        preview = lines.slice(4, 7).join(' ').replace(/[=─]+/g, '').trim();
+    }
+    if (preview.length > 250) preview = preview.slice(0, 250) + '…';
+
+    return `
+        <article class="chapter-card ${isOmega ? 'omega-card' : ''}" id="ch-${chNum}" data-chapter="${chapter.chapter_num}" data-epoch="${chapter.epoch}">
+            <div class="chapter-header" onclick="toggleChapter('ch-${chNum}')">
+                <div class="chapter-meta-left">
+                    <div class="chapter-num">CH. ${chNum} · ${chapter.filename || ''}</div>
+                    <div class="chapter-title">${chapter.title || chapter.epoch}</div>
+                    ${preview ? `<p style="color:var(--text-secondary);font-size:0.85rem;margin-top:0.4rem;line-height:1.5;">${preview}</p>` : ''}
+                    <div class="chapter-badges">
+                        <span class="badge epoch">${roman ? roman + ' · ' : ''}${chapter.epoch}</span>
+                        ${year ? `<span class="badge">Year ${Number(year.replace(/,/g,'')).toLocaleString()}</span>` : ''}
+                        ${civ && civ.length < 40 ? `<span class="badge">${civ}</span>` : ''}
+                        ${isOmega ? `<span class="badge omega-badge">⚡ Omega Point</span>` : ''}
+                    </div>
+                </div>
+                <div class="chapter-toggle">▾</div>
+            </div>
+            <div class="chapter-body">
+                <div class="chapter-text">${escapeHtml(chapter.content || 'Content unavailable.')}</div>
+            </div>
+        </article>
+    `;
+}
+
+// ── Toggle chapter open/closed ─────────────────────────────────────
+function toggleChapter(id) {
+    const card = document.getElementById(id);
+    if (card) card.classList.toggle('open');
+}
+
+// ── Escape HTML ────────────────────────────────────────────────────
+function escapeHtml(str) {
+    return str
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+}
+
+// ── Apply filters ──────────────────────────────────────────────────
+function applyFilters() {
+    filteredChapters = allChapters.filter(ch => {
+        const epochMatch = currentEpoch === 'all' || ch.epoch === currentEpoch;
+        const searchMatch = !searchQuery ||
+            (ch.content && ch.content.toLowerCase().includes(searchQuery)) ||
+            (ch.epoch && ch.epoch.toLowerCase().includes(searchQuery)) ||
+            (ch.title && ch.title.toLowerCase().includes(searchQuery));
+        return epochMatch && searchMatch;
+    });
+    currentPage = 1;
+    renderPage();
+    renderSidebar();
+}
+
+// ── Render current page ────────────────────────────────────────────
+function renderPage() {
+    const container = document.getElementById('chapters-container');
+    const start = (currentPage - 1) * CHAPTERS_PER_PAGE;
+    const pageChapters = filteredChapters.slice(start, start + CHAPTERS_PER_PAGE);
+
+    if (!pageChapters.length) {
+        container.innerHTML = `<div class="loading-state"><p>No chapters found for this filter.</p></div>`;
+        renderPagination();
+        return;
+    }
+
+    let html = '';
+    let lastEpoch = null;
+
+    pageChapters.forEach((ch, i) => {
+        if (ch.epoch !== lastEpoch) {
+            html += epochDividerHTML(ch.epoch);
+            lastEpoch = ch.epoch;
+        }
+        html += chapterCardHTML(ch, i);
+    });
+
+    container.innerHTML = html;
+    renderPagination();
+}
+
+// ── Render sidebar TOC ─────────────────────────────────────────────
+function renderSidebar() {
+    const toc = document.getElementById('sidebar-toc');
+    let html = '';
+    let lastEpoch = null;
+
+    const display = filteredChapters.slice(0, 200); // cap for perf
+    display.forEach(ch => {
+        if (ch.epoch !== lastEpoch) {
+            const roman = EPOCH_ROMAN[ch.epoch] || '';
+            html += `<div class="sidebar-section-label">${roman} · ${ch.epoch}</div>`;
+            lastEpoch = ch.epoch;
+        }
+        const chNum = String(ch.chapter_num).padStart(4, '0');
+        html += `<a class="sidebar-item" onclick="scrollToChapter('${chNum}')">
+            <span class="ch-num">${chNum}</span>${ch.title || ch.epoch}
+        </a>`;
+    });
+    toc.innerHTML = html || '<div style="padding:1rem 1.5rem;color:var(--text-muted);font-size:0.8rem;">No chapters</div>';
+}
+
+function scrollToChapter(chNum) {
+    const el = document.getElementById(`ch-${chNum}`);
+    if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        el.classList.add('open');
+    } else {
+        // May be on different page — find page
+        const chIdx = filteredChapters.findIndex(c => String(c.chapter_num).padStart(4,'0') === chNum);
+        if (chIdx >= 0) {
+            currentPage = Math.floor(chIdx / CHAPTERS_PER_PAGE) + 1;
+            renderPage();
+            setTimeout(() => {
+                const el2 = document.getElementById(`ch-${chNum}`);
+                if (el2) { el2.scrollIntoView({ behavior: 'smooth' }); el2.classList.add('open'); }
+            }, 100);
+        }
+    }
+}
+
+// ── Pagination ─────────────────────────────────────────────────────
+function renderPagination() {
+    const totalPages = Math.ceil(filteredChapters.length / CHAPTERS_PER_PAGE);
+    const pg = document.getElementById('pagination');
+    if (totalPages <= 1) { pg.innerHTML = ''; return; }
+
+    let html = '';
+    if (currentPage > 1) html += `<button class="page-btn" onclick="goPage(${currentPage - 1})">← Prev</button>`;
+
+    const start = Math.max(1, currentPage - 2);
+    const end = Math.min(totalPages, start + 4);
+    for (let i = start; i <= end; i++) {
+        html += `<button class="page-btn ${i === currentPage ? 'active' : ''}" onclick="goPage(${i})">${i}</button>`;
+    }
+
+    if (currentPage < totalPages) html += `<button class="page-btn" onclick="goPage(${currentPage + 1})">Next →</button>`;
+    pg.innerHTML = html;
+}
+
+function goPage(n) {
+    currentPage = n;
+    renderPage();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ── Search ─────────────────────────────────────────────────────────
+function doSearch() {
+    searchQuery = document.getElementById('search-input').value.toLowerCase().trim();
+    applyFilters();
+}
+
+function clearSearch() {
+    searchQuery = '';
+    document.getElementById('search-input').value = '';
+    applyFilters();
+}
+
+document.getElementById('search-input').addEventListener('keydown', e => {
+    if (e.key === 'Enter') doSearch();
+});
+
+// ── Epoch filter pills ─────────────────────────────────────────────
+document.querySelectorAll('.epoch-pill').forEach(pill => {
+    pill.addEventListener('click', () => {
+        document.querySelectorAll('.epoch-pill').forEach(p => p.classList.remove('active'));
+        pill.classList.add('active');
+        currentEpoch = pill.dataset.epoch;
+        applyFilters();
+    });
+});
+
+// ── Main init ──────────────────────────────────────────────────────
+async function init() {
+    const data = await fetchLibrary();
+
+    if (data) {
+        civState = data.civilization_state || {};
+        allChapters = data.chapters || [];
+        renderStats(civState);
+    } else {
+        // Fallback: minimal placeholder
+        civState = { chapters_written: 0, year: 0, consciousness_level: 0, epoch_index: 0 };
+        allChapters = [];
+        document.getElementById('chapters-container').innerHTML = `
+            <div class="loading-state">
+                <p style="color:var(--text-secondary);">
+                    The Great Library is compiling…<br>
+                    <small style="color:var(--text-muted);margin-top:0.5rem;display:block;">
+                        Run: <code style="background:var(--bg-surface);padding:0.2rem 0.5rem;border-radius:3px;">python3 /home/praneeth/aeonforge_system/compile_library.py</code>
+                        to generate library data, then restart the server.
+                    </small>
+                </p>
+            </div>`;
+        renderStats(civState);
+        return;
+    }
+
+    filteredChapters = [...allChapters];
+    renderPage();
+    renderSidebar();
+}
+
+init();
+</script>
+</body>
+</html>
