@@ -941,6 +941,27 @@ document.querySelectorAll('.epoch-pill').forEach(pill => {
     });
 });
 
+// ── Live simulation status polling ────────────────────────────────
+async function pollSimulationStatus() {
+    try {
+        const res = await fetch(`${API_BASE}/simulation_status.json?_=${Date.now()}`);
+        if (!res.ok) return;
+        const status = await res.json();
+        const sim = status.simulation || {};
+        // Update live stats
+        if (sim.year) document.getElementById('stat-year').textContent = Number(sim.year).toLocaleString();
+        if (sim.consciousness !== undefined) document.getElementById('stat-consciousness').textContent = parseFloat(sim.consciousness).toFixed(4);
+        if (sim.current_epoch) document.getElementById('stat-epoch').textContent = sim.current_epoch;
+        if (status.library?.total_chapters) document.getElementById('stat-chapters').textContent = status.library.total_chapters;
+        if (sim.omega_point_achieved || sim.consciousness >= 1.0) {
+            document.getElementById('omega-splash').style.display = 'block';
+        }
+        // Update footer
+        document.getElementById('footer-status').textContent =
+            `⚡ LIVE · Year ${Number(sim.year || 0).toLocaleString()} · Consciousness ${parseFloat(sim.consciousness || 0).toFixed(4)} · ${sim.current_epoch || ''} · Synced ${new Date(status.updated_at).toLocaleTimeString()}`;
+    } catch (err) { /* silent */ }
+}
+
 // ── Main init ──────────────────────────────────────────────────────
 async function init() {
     const data = await fetchLibrary();
@@ -949,6 +970,8 @@ async function init() {
         civState = data.civilization_state || {};
         allChapters = data.chapters || [];
         renderStats(civState);
+        // Immediately poll for fresher live status
+        pollSimulationStatus();
     } else {
         // Fallback: minimal placeholder
         civState = { chapters_written: 0, year: 0, consciousness_level: 0, epoch_index: 0 };
