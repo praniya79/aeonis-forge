@@ -1,0 +1,101 @@
+---
+import '../styles/global.css';
+import { site, nav } from '../content';
+
+const { title, description } = Astro.props;
+const pageTitle = title ? `${title} | ${site.name}` : site.name;
+const pageDescription = description ?? site.subtagline;
+
+const whatsappHref = `https://wa.me/${site.whatsapp.numberE164}?text=${encodeURIComponent('Hi Art Engine! I need a quote. My wall size is __ and location is __.')}`;
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={pageDescription} />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+  </head>
+  <body class="min-h-dvh bg-[#EFEDE4] text-[#1A1F24] antialiased">
+    <style>
+      /* In case Tailwind doesn't load (dev env / build glitch), keep the layout usable. */
+      *,*::before,*::after{box-sizing:border-box}
+      body{margin:0;font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial}
+      img{max-width:100%;display:block}
+      a{color:inherit}
+    </style>
+    <header class="sticky top-0 z-50 border-b border-black/10 bg-[#EFEDE4]/80 backdrop-blur">
+      <div class="mx-auto flex max-w-6xl items-center justify-between px-5 py-4">
+        <a href="/" class="flex items-center gap-3">
+          <div class="h-9 w-9 overflow-hidden rounded-full border border-black/10 bg-white/40">
+            <img src="/images/logo-badge.jpg" alt="Art Engine" class="h-full w-full object-cover" loading="eager" />
+          </div>
+          <div class="leading-tight">
+            <div class="text-sm font-medium tracking-wide">{site.name}</div>
+            <div class="text-xs text-black/60">{site.domain}</div>
+          </div>
+        </a>
+
+        <nav class="hidden items-center gap-6 text-sm md:flex">
+          {nav.map((item) => (
+            <a class="text-black/70 transition hover:text-black" href={item.href}>{item.label}</a>
+          ))}
+        </nav>
+
+        <div class="flex items-center gap-3">
+          <a
+            href={whatsappHref}
+            class="rounded-full bg-[#5E7A5A] px-4 py-2 text-sm font-medium text-white transition hover:brightness-95"
+            >Get a Quote</a
+          >
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <slot />
+    </main>
+
+    <footer class="border-t border-black/10">
+      <div class="mx-auto grid max-w-6xl gap-8 px-5 py-12 md:grid-cols-3">
+        <div>
+          <div class="mb-3 flex items-center gap-3">
+            <div class="h-10 w-10 overflow-hidden rounded-full border border-black/10 bg-white/40">
+              <img src="/images/logo-badge.jpg" alt="Art Engine badge" class="h-full w-full object-cover" loading="lazy" />
+            </div>
+            <div>
+              <div class="text-sm font-medium">{site.name}</div>
+              <div class="text-xs text-black/60">Zen minimalist wall features</div>
+            </div>
+          </div>
+          <p class="text-sm text-black/70">{site.subtagline}</p>
+        </div>
+
+        <div class="text-sm">
+          <div class="mb-3 font-medium">Service Area</div>
+          <ul class="space-y-1 text-black/70">
+            <li>Colombo (installation)</li>
+            <li>Gampaha (+ travel fee {site.travelFeeGampaha})</li>
+            <li>Lead time: {site.leadTime}</li>
+          </ul>
+        </div>
+
+        <div class="text-sm">
+          <div class="mb-3 font-medium">Contact</div>
+          <a class="text-black/70 underline underline-offset-4 hover:text-black" href={whatsappHref}>
+            WhatsApp: {site.whatsapp.numberDisplay}
+          </a>
+          <div class="mt-6 text-xs text-black/50">© {new Date().getFullYear()} {site.name}. All rights reserved.</div>
+        </div>
+      </div>
+    </footer>
+
+    <a
+      href={whatsappHref}
+      class="wa-fab"
+    >
+      <span>WhatsApp</span>
+    </a>
+  </body>
+</html>

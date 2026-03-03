@@ -1,0 +1,24 @@
+/* Fallback styles when Tailwind isn't applied.
+   Keeps the site from looking "crashed" (unstyled HTML).
+   Tailwind should normally override these.
+*/
+
+body { margin: 0; }
+header, footer { width: 100%; }
+
+/* Basic typography */
+h1, h2, h3 { margin: 0 0 0.5rem 0; }
+p { margin: 0.5rem 0; }
+
+/* Make main areas readable */
+main { display: block; }
+
+/* Keep images responsive */
+img { max-width: 100%; height: auto; }
+
+/* Simple container fallback */
+.container {
+  max-width: 72rem;
+  margin: 0 auto;
+  padding: 0 1.25rem;
+}

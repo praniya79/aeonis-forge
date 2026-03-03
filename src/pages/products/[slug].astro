@@ -1,0 +1,63 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { products, site } from '../../content';
+
+export function getStaticPaths() {
+  return products.map((p) => ({ params: { slug: p.slug } }));
+}
+
+const { slug } = Astro.params;
+const product = products.find((p) => p.slug === slug);
+
+if (!product) {
+  throw new Error('Product not found');
+}
+
+const whatsappText = `Hi Art Engine! I want this design: ${product.name}. My wall size is __ (W×H) and location is __ (Colombo/Gampaha). Finish: __. LED: __.`;
+const whatsappHref = `https://wa.me/${site.whatsapp.numberE164}?text=${encodeURIComponent(whatsappText)}`;
+---
+
+<Layout title={product.name}>
+  <section class="mx-auto max-w-6xl px-5 py-14">
+    <div class="grid gap-10 md:grid-cols-12">
+      <div class="md:col-span-7">
+        <div class="overflow-hidden rounded-3xl border border-black/10 bg-white/30">
+          <img src={product.image} alt={product.name} class="aspect-[4/3] w-full object-cover" loading="eager" />
+        </div>
+      </div>
+
+      <div class="md:col-span-5">
+        <div class="text-xs uppercase tracking-wide text-black/50">{product.series} Series</div>
+        <h1 class="mt-2 text-4xl font-semibold tracking-tight">{product.name}</h1>
+        <div class="mt-4 text-lg font-semibold">From LKR {product.priceFromLkr.toLocaleString('en-US')}</div>
+        <p class="mt-4 text-black/70">{product.description}</p>
+
+        <div class="mt-6 space-y-3">
+          <a
+            href={whatsappHref}
+            class="flex w-full items-center justify-center rounded-full bg-[#1A1F24] px-5 py-3 text-sm font-semibold text-[#EFEDE4] hover:bg-black"
+          >
+            Get a Quote on WhatsApp
+          </a>
+          <a
+            href="/products"
+            class="flex w-full items-center justify-center rounded-full border border-black/15 bg-white/30 px-5 py-3 text-sm font-semibold text-black/80 hover:bg-white/50"
+          >
+            Back to products
+          </a>
+        </div>
+
+        <div class="mt-8 rounded-3xl border border-black/10 bg-white/30 p-6 text-sm text-black/70">
+          <div class="font-semibold text-black">Notes</div>
+          <ul class="mt-3 space-y-2">
+            <li>• Final price may vary based on wall condition, measurements, finish, and complexity.</li>
+            <li>• We confirm details within 24 hours.</li>
+            <li>• Colombo installation available.</li>
+            <li>• Gampaha: + travel fee {site.travelFeeGampaha}.</li>
+            <li>• Lead time: {site.leadTime}.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+</Layout>

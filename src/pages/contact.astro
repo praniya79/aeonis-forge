@@ -1,0 +1,40 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { site } from '../content';
+
+const whatsappHref = `https://wa.me/${site.whatsapp.numberE164}?text=${encodeURIComponent('Hi Art Engine! I need a quote. Wall size: __ (W×H). Location: __. Style: __. Finish: __. LED: __.')}`;
+---
+
+<Layout title="Contact">
+  <section class="mx-auto max-w-6xl px-5 py-14">
+    <div class="max-w-2xl">
+      <h1 class="text-4xl font-semibold tracking-tight">Contact</h1>
+      <p class="mt-4 text-black/70">
+        Fastest way is WhatsApp. Send a wall photo/video, wall size (W×H), and your location (Colombo / Gampaha).
+      </p>
+    </div>
+
+    <div class="mt-10 grid gap-6 md:grid-cols-2">
+      <div class="rounded-3xl border border-black/10 bg-white/30 p-6">
+        <div class="text-xs uppercase tracking-wide text-black/50">WhatsApp</div>
+        <div class="mt-2 text-xl font-semibold">{site.whatsapp.numberDisplay}</div>
+        <p class="mt-2 text-sm text-black/70">We reply with 2–3 options and a quotation. Lead time {site.leadTime}.</p>
+        <div class="mt-6">
+          <a href={whatsappHref} class="inline-flex rounded-full bg-[#5E7A5A] px-5 py-3 text-sm font-semibold text-white hover:brightness-95">Message on WhatsApp</a>
+        </div>
+      </div>
+
+      <div class="rounded-3xl border border-black/10 bg-white/30 p-6">
+        <div class="text-xs uppercase tracking-wide text-black/50">What to send</div>
+        <ul class="mt-3 space-y-2 text-sm text-black/70">
+          <li>• Wall photo/video</li>
+          <li>• Wall size (W×H)</li>
+          <li>• Location (Colombo / Gampaha)</li>
+          <li>• Style: Halo / Wave / Modular</li>
+          <li>• Finish: White / Wood / Black</li>
+          <li>• LED: Warm / Neutral / None</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+</Layout>
