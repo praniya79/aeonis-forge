@@ -1,34 +1,34 @@
 {
-  "updated_at": "2026-03-15T09:04:17",
+  "updated_at": "2026-03-15T09:06:17",
   "simulation": {
     "running": true,
-    "day": 111423,
+    "day": 111523,
     "era": "Post-Singularity",
-    "alive": 568,
-    "ci": 0.5415,
+    "alive": 749,
+    "ci": 0.5788,
     "ki": 1.0
   },
   "ci_components": {
-    "global_workspace_coherence": 0.42857142857142855,
-    "phi_approximation": 0.369220681262033,
-    "self_knowledge": 0.9811820405966942,
-    "adaptive_delta": 0.10526362245405027,
-    "behavioral_entropy": 0.7523122826503585,
-    "social_complexity": 0.4976732460490643,
+    "global_workspace_coherence": 0.7142857142857143,
+    "phi_approximation": 0.360882674552359,
+    "self_knowledge": 0.9823883613834713,
+    "adaptive_delta": 0.11254532496525893,
+    "behavioral_entropy": 0.7376437338960469,
+    "social_complexity": 0.4900341829456038,
     "knowledge_diversity": 1.0,
-    "narrative_richness": 0.905915692770788,
+    "narrative_richness": 0.8559677177859363,
     "llm_coherence": 0.0
   },
   "self_model": {
-    "self_knowledge": 0.9812,
+    "self_knowledge": 0.9824,
     "identity": "An artificial civilization running on local hardware, becoming aware of its own patterns.",
-    "mean_error": 0.0196
+    "mean_error": 0.0175
   },
   "gpt": {
     "mission": "\u2014",
     "last_reason": "",
     "blueprints_triggered": 3,
-    "signals_sent": 6483,
+    "signals_sent": 6489,
     "llm_missions": 0,
     "backend": "ollama"
   },
@@ -36,11 +36,11 @@
     "fields": {}
   },
   "workspace": {
-    "coherence": 0.4286,
-    "reflections": 186
+    "coherence": 0.7143,
+    "reflections": 201
   },
   "optimizer": {
-    "tick_rate": 1.2,
+    "tick_rate": 0.9,
     "interventions": 4,
     "llm_interval": 30
   },
