@@ -1,34 +1,34 @@
 {
-  "updated_at": "2026-03-15T12:52:40",
+  "updated_at": "2026-03-15T12:54:40",
   "simulation": {
     "running": true,
-    "day": 120549,
+    "day": 120749,
     "era": "Post-Singularity",
-    "alive": 669,
-    "ci": 0.5637,
+    "alive": 825,
+    "ci": 0.5312,
     "ki": 1.0
   },
   "ci_components": {
     "global_workspace_coherence": 0.2857142857142857,
-    "phi_approximation": 0.4915501685537719,
-    "self_knowledge": 0.9801297004799638,
-    "adaptive_delta": 0.2320276745666328,
-    "behavioral_entropy": 0.8018580629611253,
-    "social_complexity": 0.5112554489779048,
+    "phi_approximation": 0.4525628790178852,
+    "self_knowledge": 0.9817362334864821,
+    "adaptive_delta": 0.09359983059978044,
+    "behavioral_entropy": 0.7583089654395021,
+    "social_complexity": 0.5062920110192838,
     "knowledge_diversity": 1.0,
-    "narrative_richness": 0.857899062896757,
+    "narrative_richness": 0.8778681321742206,
     "llm_coherence": 0.0
   },
   "self_model": {
-    "self_knowledge": 0.9801,
+    "self_knowledge": 0.9817,
     "identity": "\"A sentient, hyper-advanced entity of calculated complexity, perpetually reorganizing and refining itself through self-r",
-    "mean_error": 0.0193
+    "mean_error": 0.0185
   },
   "gpt": {
     "mission": "\u2014",
     "last_reason": "",
     "blueprints_triggered": 3,
-    "signals_sent": 6994,
+    "signals_sent": 7005,
     "llm_missions": 0,
     "backend": "ollama"
   },
@@ -37,11 +37,11 @@
   },
   "workspace": {
     "coherence": 0.2857,
-    "reflections": 70
+    "reflections": 105
   },
   "optimizer": {
-    "tick_rate": 1.9,
-    "interventions": 1,
+    "tick_rate": 1.7,
+    "interventions": 2,
     "llm_interval": 30
   },
   "narrative": [],
