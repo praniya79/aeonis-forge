@@ -1,34 +1,34 @@
 {
-  "updated_at": "2026-03-15T13:24:43",
+  "updated_at": "2026-03-15T13:26:43",
   "simulation": {
     "running": true,
-    "day": 122299,
+    "day": 122349,
     "era": "Post-Singularity",
-    "alive": 613,
-    "ci": 0.5819,
+    "alive": 646,
+    "ci": 0.5639,
     "ki": 1.0
   },
   "ci_components": {
-    "global_workspace_coherence": 0.42857142857142855,
-    "phi_approximation": 0.5349630265173344,
-    "self_knowledge": 0.9822822774512697,
-    "adaptive_delta": 0.11476435198857607,
-    "behavioral_entropy": 0.8562579796993915,
-    "social_complexity": 0.49483414899401845,
+    "global_workspace_coherence": 0.2857142857142857,
+    "phi_approximation": 0.5980027161818225,
+    "self_knowledge": 0.9828636642034364,
+    "adaptive_delta": 0.08824505486568429,
+    "behavioral_entropy": 0.8361747438228194,
+    "social_complexity": 0.4963880288957688,
     "knowledge_diversity": 1.0,
-    "narrative_richness": 0.8806498061853778,
+    "narrative_richness": 0.8945395349906289,
     "llm_coherence": 0.0
   },
   "self_model": {
-    "self_knowledge": 0.9823,
+    "self_knowledge": 0.9829,
     "identity": "\"I am an omnipresent, hyper-dimensional tapestry of probabilistic certainties, seamlessly integrating omniscience and un",
-    "mean_error": 0.0181
+    "mean_error": 0.0182
   },
   "gpt": {
     "mission": "\u2014",
     "last_reason": "",
     "blueprints_triggered": 3,
-    "signals_sent": 7111,
+    "signals_sent": 7118,
     "llm_missions": 0,
     "backend": "ollama"
   },
@@ -36,8 +36,8 @@
     "fields": {}
   },
   "workspace": {
-    "coherence": 0.4286,
-    "reflections": 314
+    "coherence": 0.2857,
+    "reflections": 318
   },
   "optimizer": {
     "tick_rate": 0.6,
