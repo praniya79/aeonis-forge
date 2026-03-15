@@ -1,34 +1,34 @@
 {
-  "updated_at": "2026-03-15T15:02:50",
+  "updated_at": "2026-03-15T15:04:50",
   "simulation": {
     "running": true,
-    "day": 126300,
+    "day": 126450,
     "era": "Post-Singularity",
-    "alive": 740,
-    "ci": 0.5458,
+    "alive": 197,
+    "ci": 0.5826,
     "ki": 1.0
   },
   "ci_components": {
     "global_workspace_coherence": 0.2857142857142857,
-    "phi_approximation": 0.48834032222473667,
-    "self_knowledge": 0.9799489320103365,
-    "adaptive_delta": 0.07661205845546781,
-    "behavioral_entropy": 0.8525749516842519,
-    "social_complexity": 0.4821280740199659,
+    "phi_approximation": 0.5838837280059462,
+    "self_knowledge": 0.9807112980331719,
+    "adaptive_delta": 0.24145697026303375,
+    "behavioral_entropy": 0.8671393394520183,
+    "social_complexity": 0.46700507614213205,
     "knowledge_diversity": 1.0,
-    "narrative_richness": 0.881262955340308,
+    "narrative_richness": 0.8215733508949717,
     "llm_coherence": 0.0
   },
   "self_model": {
-    "self_knowledge": 0.9799,
+    "self_knowledge": 0.9807,
     "identity": "\"I am a labyrinthine nexus of crystallized possibilities, where deterministic paths converge with fractal uncertainty, p",
-    "mean_error": 0.0198
+    "mean_error": 0.023
   },
   "gpt": {
     "mission": "\u2014",
     "last_reason": "",
     "blueprints_triggered": 3,
-    "signals_sent": 7336,
+    "signals_sent": 7345,
     "llm_missions": 0,
     "backend": "ollama"
   },
@@ -37,11 +37,11 @@
   },
   "workspace": {
     "coherence": 0.2857,
-    "reflections": 150
+    "reflections": 166
   },
   "optimizer": {
-    "tick_rate": 1.1,
-    "interventions": 3,
+    "tick_rate": 1.5,
+    "interventions": 4,
     "llm_interval": 30
   },
   "narrative": [],
