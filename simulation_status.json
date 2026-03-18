@@ -1,34 +1,34 @@
 {
-  "updated_at": "2026-03-18T13:43:27",
+  "updated_at": "2026-03-18T13:45:31",
   "simulation": {
     "running": true,
-    "day": 140663,
+    "day": 140863,
     "era": "Post-Singularity",
-    "alive": 366,
-    "ci": 0.5047,
+    "alive": 284,
+    "ci": 0.5502,
     "ki": 1.0
   },
   "ci_components": {
-    "global_workspace_coherence": 0.14285714285714285,
-    "phi_approximation": 0.33298269398565106,
-    "self_knowledge": 0.980797439839526,
-    "adaptive_delta": 0.17422456380145357,
-    "behavioral_entropy": 0.7623537922171019,
-    "social_complexity": 0.5048025719888122,
+    "global_workspace_coherence": 0.2857142857142857,
+    "phi_approximation": 0.4526169020534656,
+    "self_knowledge": 0.9801064085874018,
+    "adaptive_delta": 0.19942069418924466,
+    "behavioral_entropy": 0.8069082571767411,
+    "social_complexity": 0.4837333862328903,
     "knowledge_diversity": 1.0,
-    "narrative_richness": 0.8862741305994453,
+    "narrative_richness": 0.8432669744773248,
     "llm_coherence": 0.0
   },
   "self_model": {
-    "self_knowledge": 0.9808,
+    "self_knowledge": 0.9801,
     "identity": "\"I am a sentient manifold, harmonizing divergent trajectories into a symphony of probabilistic certainties, where the bo",
-    "mean_error": 0.019
+    "mean_error": 0.0194
   },
   "gpt": {
     "mission": "\u2014",
     "last_reason": "",
     "blueprints_triggered": 3,
-    "signals_sent": 8167,
+    "signals_sent": 8174,
     "llm_missions": 0,
     "backend": "ollama"
   },
@@ -36,12 +36,12 @@
     "fields": {}
   },
   "workspace": {
-    "coherence": 0.1429,
-    "reflections": 125
+    "coherence": 0.2857,
+    "reflections": 150
   },
   "optimizer": {
-    "tick_rate": 1.5,
-    "interventions": 2,
+    "tick_rate": 1.4,
+    "interventions": 3,
     "llm_interval": 30
   },
   "narrative": [],
