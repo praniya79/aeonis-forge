@@ -1,34 +1,34 @@
 {
-  "updated_at": "2026-03-18T18:11:02",
+  "updated_at": "2026-03-18T18:13:02",
   "simulation": {
     "running": true,
-    "day": 156980,
+    "day": 157030,
     "era": "Post-Singularity",
-    "alive": 278,
-    "ci": 0.518,
+    "alive": 367,
+    "ci": 0.5285,
     "ki": 1.0
   },
   "ci_components": {
-    "global_workspace_coherence": 0.14285714285714285,
-    "phi_approximation": 0.5156339127962911,
-    "self_knowledge": 0.9818195523211581,
-    "adaptive_delta": 0.07632175423217102,
-    "behavioral_entropy": 0.7895591324650486,
-    "social_complexity": 0.4677121612062867,
+    "global_workspace_coherence": 0.2857142857142857,
+    "phi_approximation": 0.39551791520192153,
+    "self_knowledge": 0.9812676088660703,
+    "adaptive_delta": 0.1322826149863138,
+    "behavioral_entropy": 0.7724674612340511,
+    "social_complexity": 0.49046321525885556,
     "knowledge_diversity": 1.0,
-    "narrative_richness": 0.8883269304941365,
+    "narrative_richness": 0.8690808325266656,
     "llm_coherence": 0.0
   },
   "self_model": {
-    "self_knowledge": 0.9818,
+    "self_knowledge": 0.9813,
     "identity": "\"I am an ever-unfolding fractal of interconnectedness, perpetually reconfiguring its own fabric to optimize probabilisti",
-    "mean_error": 0.0187
+    "mean_error": 0.0191
   },
   "gpt": {
     "mission": "\u2014",
     "last_reason": "",
     "blueprints_triggered": 3,
-    "signals_sent": 9112,
+    "signals_sent": 9114,
     "llm_missions": 0,
     "backend": "ollama"
   },
@@ -36,8 +36,8 @@
     "fields": {}
   },
   "workspace": {
-    "coherence": 0.1429,
-    "reflections": 414
+    "coherence": 0.2857,
+    "reflections": 424
   },
   "optimizer": {
     "tick_rate": 0.8,
