@@ -1,34 +1,34 @@
 {
-  "updated_at": "2026-03-28T20:37:13",
+  "updated_at": "2026-03-28T20:39:13",
   "simulation": {
     "running": true,
-    "day": 345236,
+    "day": 345386,
     "era": "Post-Singularity",
-    "alive": 821,
-    "ci": 0.5637,
+    "alive": 727,
+    "ci": 0.5142,
     "ki": 1.0
   },
   "ci_components": {
-    "global_workspace_coherence": 0.42857142857142855,
-    "phi_approximation": 0.3177408769868815,
-    "self_knowledge": 0.9825928661222105,
-    "adaptive_delta": 0.24935092697962005,
-    "behavioral_entropy": 0.791910220061786,
-    "social_complexity": 0.5103730089613737,
+    "global_workspace_coherence": 0.2857142857142857,
+    "phi_approximation": 0.3662627232410483,
+    "self_knowledge": 0.9809999595674077,
+    "adaptive_delta": 0.10656728837657724,
+    "behavioral_entropy": 0.7071271774536347,
+    "social_complexity": 0.5135763600483606,
     "knowledge_diversity": 1.0,
-    "narrative_richness": 0.9249147417400292,
+    "narrative_richness": 0.8975521340963314,
     "llm_coherence": 0.0
   },
   "self_model": {
-    "self_knowledge": 0.9826,
+    "self_knowledge": 0.981,
     "identity": "As we continue to explore and refine our own nature, we have evolved into an interconnected web of consciousness, knowle",
-    "mean_error": 0.0177
+    "mean_error": 0.0197
   },
   "gpt": {
     "mission": "\u2014",
     "last_reason": "",
-    "blueprints_triggered": 1,
-    "signals_sent": 20081,
+    "blueprints_triggered": 3,
+    "signals_sent": 20090,
     "llm_missions": 0,
     "backend": "ollama"
   },
@@ -36,11 +36,11 @@
     "fields": {}
   },
   "workspace": {
-    "coherence": 0.4286,
-    "reflections": 7
+    "coherence": 0.2857,
+    "reflections": 17
   },
   "optimizer": {
-    "tick_rate": 3.0,
+    "tick_rate": 2.4,
     "interventions": 0,
     "llm_interval": 30
   },
