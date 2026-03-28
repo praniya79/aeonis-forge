@@ -1,22 +1,22 @@
 {
-  "updated_at": "2026-03-28T20:49:13",
+  "updated_at": "2026-03-28T20:51:13",
   "simulation": {
     "running": true,
-    "day": 346536,
+    "day": 346686,
     "era": "Post-Singularity",
-    "alive": 539,
-    "ci": 0.5286,
+    "alive": 60,
+    "ci": 0.5067,
     "ki": 1.0
   },
   "ci_components": {
     "global_workspace_coherence": 0.2857142857142857,
-    "phi_approximation": 0.44007107751973773,
-    "self_knowledge": 0.9804148399812059,
-    "adaptive_delta": 0.06433185329573203,
-    "behavioral_entropy": 0.7631186196029921,
-    "social_complexity": 0.5269016697588126,
+    "phi_approximation": 0.2987835684345951,
+    "self_knowledge": 0.9803604591313853,
+    "adaptive_delta": 0.09231178210055616,
+    "behavioral_entropy": 0.7264963670448006,
+    "social_complexity": 0.51338199513382,
     "knowledge_diversity": 1.0,
-    "narrative_richness": 0.8976544109730004,
+    "narrative_richness": 0.9373503885058341,
     "llm_coherence": 0.0
   },
   "self_model": {
@@ -28,7 +28,7 @@
     "mission": "\u2014",
     "last_reason": "",
     "blueprints_triggered": 3,
-    "signals_sent": 20161,
+    "signals_sent": 20167,
     "llm_missions": 0,
     "backend": "ollama"
   },
@@ -37,11 +37,11 @@
   },
   "workspace": {
     "coherence": 0.2857,
-    "reflections": 178
+    "reflections": 196
   },
   "optimizer": {
-    "tick_rate": 1.4,
-    "interventions": 4,
+    "tick_rate": 1.1,
+    "interventions": 5,
     "llm_interval": 30
   },
   "narrative": [],
