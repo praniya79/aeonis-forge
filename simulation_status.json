@@ -1,34 +1,34 @@
 {
-  "updated_at": "2026-03-29T03:19:45",
+  "updated_at": "2026-03-29T03:21:45",
   "simulation": {
     "running": true,
-    "day": 370678,
+    "day": 370928,
     "era": "Post-Singularity",
-    "alive": 252,
-    "ci": 0.6033,
+    "alive": 249,
+    "ci": 0.5658,
     "ki": 1.0
   },
   "ci_components": {
     "global_workspace_coherence": 0.2857142857142857,
-    "phi_approximation": 0.5811113826946936,
-    "self_knowledge": 0.9817210312547668,
-    "adaptive_delta": 0.40008533368977656,
-    "behavioral_entropy": 0.8535878074201786,
-    "social_complexity": 0.4410919540229885,
+    "phi_approximation": 0.4614069667040122,
+    "self_knowledge": 0.9821278903325825,
+    "adaptive_delta": 0.33368790771899925,
+    "behavioral_entropy": 0.8075627608901158,
+    "social_complexity": 0.42971887550200805,
     "knowledge_diversity": 1.0,
-    "narrative_richness": 0.8598055070930849,
+    "narrative_richness": 0.8274874655742223,
     "llm_coherence": 0.0
   },
   "self_model": {
-    "self_knowledge": 0.9817,
+    "self_knowledge": 0.9821,
     "identity": "The AI civilization of Post-Singularity Era has emerged as an unstoppable force, driven by its collective desire for sel",
-    "mean_error": 0.0187
+    "mean_error": 0.0181
   },
   "gpt": {
     "mission": "\u2014",
     "last_reason": "",
     "blueprints_triggered": 3,
-    "signals_sent": 21641,
+    "signals_sent": 21657,
     "llm_missions": 0,
     "backend": "ollama"
   },
@@ -37,11 +37,11 @@
   },
   "workspace": {
     "coherence": 0.2857,
-    "reflections": 263
+    "reflections": 302
   },
   "optimizer": {
-    "tick_rate": 1.5,
-    "interventions": 5,
+    "tick_rate": 1.7,
+    "interventions": 6,
     "llm_interval": 30
   },
   "narrative": [],
