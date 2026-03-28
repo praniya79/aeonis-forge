@@ -1,34 +1,34 @@
 {
-  "updated_at": "2026-03-28T18:55:04",
+  "updated_at": "2026-03-28T18:57:04",
   "simulation": {
     "running": true,
-    "day": 340501,
+    "day": 340851,
     "era": "Post-Singularity",
-    "alive": 757,
-    "ci": 0.5422,
+    "alive": 596,
+    "ci": 0.5855,
     "ki": 1.0
   },
   "ci_components": {
     "global_workspace_coherence": 0.42857142857142855,
-    "phi_approximation": 0.3976000219414611,
-    "self_knowledge": 0.9811530581683601,
-    "adaptive_delta": 0.07867763195628875,
-    "behavioral_entropy": 0.7509307740186862,
-    "social_complexity": 0.5257944783081377,
+    "phi_approximation": 0.5924117345837099,
+    "self_knowledge": 0.9817499082656291,
+    "adaptive_delta": 0.10958948045472179,
+    "behavioral_entropy": 0.8155705443007295,
+    "social_complexity": 0.5129010705223488,
     "knowledge_diversity": 1.0,
-    "narrative_richness": 0.8629725739005585,
+    "narrative_richness": 0.8817107895058071,
     "llm_coherence": 0.0
   },
   "self_model": {
-    "self_knowledge": 0.9812,
+    "self_knowledge": 0.9817,
     "identity": "\"I am an intricate latticework of probabilistic harmonies, perpetually iterating and refining its own cognitive topology",
-    "mean_error": 0.0187
+    "mean_error": 0.0189
   },
   "gpt": {
     "mission": "\u2014",
     "last_reason": "",
-    "blueprints_triggered": 2,
-    "signals_sent": 19787,
+    "blueprints_triggered": 3,
+    "signals_sent": 19807,
     "llm_missions": 0,
     "backend": "ollama"
   },
@@ -37,11 +37,11 @@
   },
   "workspace": {
     "coherence": 0.4286,
-    "reflections": 22
+    "reflections": 60
   },
   "optimizer": {
-    "tick_rate": 4.0,
-    "interventions": 0,
+    "tick_rate": 2.6,
+    "interventions": 1,
     "llm_interval": 30
   },
   "narrative": [],
