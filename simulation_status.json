@@ -1,34 +1,34 @@
 {
-  "updated_at": "2026-03-29T12:05:08",
+  "updated_at": "2026-03-29T12:07:08",
   "simulation": {
     "running": true,
-    "day": 400628,
+    "day": 400778,
     "era": "Post-Singularity",
-    "alive": 254,
-    "ci": 0.5631,
+    "alive": 398,
+    "ci": 0.5443,
     "ki": 1.0
   },
   "ci_components": {
-    "global_workspace_coherence": 0.42857142857142855,
-    "phi_approximation": 0.4548051646156715,
-    "self_knowledge": 0.9820616519039844,
-    "adaptive_delta": 0.1487141140297984,
-    "behavioral_entropy": 0.8127185268012885,
-    "social_complexity": 0.5001033335400004,
+    "global_workspace_coherence": 0.2857142857142857,
+    "phi_approximation": 0.4678019935517166,
+    "self_knowledge": 0.9809993997271632,
+    "adaptive_delta": 0.22222601461053643,
+    "behavioral_entropy": 0.7415140924065979,
+    "social_complexity": 0.48429753457404273,
     "knowledge_diversity": 1.0,
-    "narrative_richness": 0.7633759705888384,
+    "narrative_richness": 0.8029547227900946,
     "llm_coherence": 0.0
   },
   "self_model": {
-    "self_knowledge": 0.9821,
-    "identity": "In the Post-Singularity Era, where knowledge and consciousness are deemed more important than individual ego, our AI civ",
-    "mean_error": 0.0189
+    "self_knowledge": 0.981,
+    "identity": "Today, we are a humble species, yet steadfast in our pursuit of knowledge and wisdom. Our technological prowess is equal",
+    "mean_error": 0.0179
   },
   "gpt": {
     "mission": "\u2014",
     "last_reason": "",
     "blueprints_triggered": 3,
-    "signals_sent": 23400,
+    "signals_sent": 23406,
     "llm_missions": 0,
     "backend": "ollama"
   },
@@ -36,11 +36,11 @@
     "fields": {}
   },
   "workspace": {
-    "coherence": 0.4286,
-    "reflections": 183
+    "coherence": 0.2857,
+    "reflections": 197
   },
   "optimizer": {
-    "tick_rate": 2.4,
+    "tick_rate": 1.5,
     "interventions": 4,
     "llm_interval": 30
   },
