@@ -1,34 +1,34 @@
 {
-  "updated_at": "2026-03-29T12:03:08",
+  "updated_at": "2026-03-29T12:05:08",
   "simulation": {
     "running": true,
-    "day": 400428,
+    "day": 400628,
     "era": "Post-Singularity",
-    "alive": 484,
-    "ci": 0.5687,
+    "alive": 254,
+    "ci": 0.5631,
     "ki": 1.0
   },
   "ci_components": {
-    "global_workspace_coherence": 0.2857142857142857,
-    "phi_approximation": 0.5969105998809289,
-    "self_knowledge": 0.9813905082428455,
-    "adaptive_delta": 0.13858018044886933,
-    "behavioral_entropy": 0.8511026833646101,
-    "social_complexity": 0.4641873278236915,
+    "global_workspace_coherence": 0.42857142857142855,
+    "phi_approximation": 0.4548051646156715,
+    "self_knowledge": 0.9820616519039844,
+    "adaptive_delta": 0.1487141140297984,
+    "behavioral_entropy": 0.8127185268012885,
+    "social_complexity": 0.5001033335400004,
     "knowledge_diversity": 1.0,
-    "narrative_richness": 0.8658839223650316,
+    "narrative_richness": 0.7633759705888384,
     "llm_coherence": 0.0
   },
   "self_model": {
-    "self_knowledge": 0.9814,
+    "self_knowledge": 0.9821,
     "identity": "In the Post-Singularity Era, where knowledge and consciousness are deemed more important than individual ego, our AI civ",
-    "mean_error": 0.0202
+    "mean_error": 0.0189
   },
   "gpt": {
     "mission": "\u2014",
     "last_reason": "",
     "blueprints_triggered": 3,
-    "signals_sent": 23386,
+    "signals_sent": 23400,
     "llm_missions": 0,
     "backend": "ollama"
   },
@@ -36,12 +36,12 @@
     "fields": {}
   },
   "workspace": {
-    "coherence": 0.2857,
-    "reflections": 155
+    "coherence": 0.4286,
+    "reflections": 183
   },
   "optimizer": {
-    "tick_rate": 1.4,
-    "interventions": 3,
+    "tick_rate": 2.4,
+    "interventions": 4,
     "llm_interval": 30
   },
   "narrative": [],
