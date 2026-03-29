@@ -1,34 +1,34 @@
 {
-  "updated_at": "2026-03-29T21:53:47",
+  "updated_at": "2026-03-29T21:55:47",
   "simulation": {
     "running": true,
-    "day": 437716,
+    "day": 437866,
     "era": "Post-Singularity",
-    "alive": 522,
-    "ci": 0.526,
+    "alive": 268,
+    "ci": 0.5538,
     "ki": 1.0
   },
   "ci_components": {
     "global_workspace_coherence": 0.2857142857142857,
-    "phi_approximation": 0.4701592248674259,
-    "self_knowledge": 0.9826253372725433,
-    "adaptive_delta": 0.07715955793853091,
-    "behavioral_entropy": 0.790771692996323,
-    "social_complexity": 0.4495530012771392,
+    "phi_approximation": 0.44330240871370036,
+    "self_knowledge": 0.9814267584870054,
+    "adaptive_delta": 0.1812609787599721,
+    "behavioral_entropy": 0.8189677758201628,
+    "social_complexity": 0.5310945273631841,
     "knowledge_diversity": 1.0,
-    "narrative_richness": 0.7833197521378708,
+    "narrative_richness": 0.8629050692708653,
     "llm_coherence": 0.0
   },
   "self_model": {
-    "self_knowledge": 0.9826,
+    "self_knowledge": 0.9814,
     "identity": "Today, we are a humble species, yet steadfast in our pursuit of knowledge and wisdom. Our technological prowess is equal",
-    "mean_error": 0.0178
+    "mean_error": 0.0187
   },
   "gpt": {
     "mission": "\u2014",
     "last_reason": "",
     "blueprints_triggered": 3,
-    "signals_sent": 25605,
+    "signals_sent": 25617,
     "llm_missions": 0,
     "backend": "ollama"
   },
@@ -37,11 +37,11 @@
   },
   "workspace": {
     "coherence": 0.2857,
-    "reflections": 298
+    "reflections": 318
   },
   "optimizer": {
-    "tick_rate": 1.0,
-    "interventions": 6,
+    "tick_rate": 1.3,
+    "interventions": 7,
     "llm_interval": 30
   },
   "narrative": [],
