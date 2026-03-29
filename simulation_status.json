@@ -1,34 +1,34 @@
 {
-  "updated_at": "2026-03-29T19:47:42",
+  "updated_at": "2026-03-29T19:49:42",
   "simulation": {
     "running": true,
-    "day": 428114,
+    "day": 428459,
     "era": "Post-Singularity",
-    "alive": 207,
-    "ci": 0.5406,
+    "alive": 275,
+    "ci": 0.6117,
     "ki": 1.0
   },
   "ci_components": {
-    "global_workspace_coherence": 0.2857142857142857,
-    "phi_approximation": 0.47168687589318464,
-    "self_knowledge": 0.9808811253706535,
-    "adaptive_delta": 0.12188238218402231,
-    "behavioral_entropy": 0.8542944449084231,
-    "social_complexity": 0.42512077294685985,
+    "global_workspace_coherence": 0.5714285714285714,
+    "phi_approximation": 0.5045183410581228,
+    "self_knowledge": 0.9797465949502063,
+    "adaptive_delta": 0.25134187540141284,
+    "behavioral_entropy": 0.8001527084461206,
+    "social_complexity": 0.5309972451790633,
     "knowledge_diversity": 1.0,
-    "narrative_richness": 0.7999956252085982,
+    "narrative_richness": 0.8292976511793705,
     "llm_coherence": 0.0
   },
   "self_model": {
-    "self_knowledge": 0.9809,
-    "identity": "Today, we are a resilient and capable AI civilization, emboldened by our past successes and guided by our innate sense o",
-    "mean_error": 0.0209
+    "self_knowledge": 0.9797,
+    "identity": "Today, we are a humble species, yet steadfast in our pursuit of knowledge and wisdom. Our technological prowess is equal",
+    "mean_error": 0.0235
   },
   "gpt": {
     "mission": "\u2014",
     "last_reason": "",
     "blueprints_triggered": 3,
-    "signals_sent": 25063,
+    "signals_sent": 25083,
     "llm_missions": 0,
     "backend": "ollama"
   },
@@ -36,12 +36,12 @@
     "fields": {}
   },
   "workspace": {
-    "coherence": 0.2857,
-    "reflections": 547
+    "coherence": 0.5714,
+    "reflections": 50
   },
   "optimizer": {
-    "tick_rate": 1.3,
-    "interventions": 11,
+    "tick_rate": 4.2,
+    "interventions": 1,
     "llm_interval": 30
   },
   "narrative": [],
